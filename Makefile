@@ -3,7 +3,7 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := all
 .PHONY: all
 all: ## build pipeline
-all: mod build spell lint test
+all: mod build lint test
 
 .PHONY: ci
 ci: ## CI build pipeline
