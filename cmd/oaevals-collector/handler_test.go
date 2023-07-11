@@ -1,3 +1,4 @@
+// handler_test.go
 package oaievals_collector
 
 import (
@@ -5,9 +6,13 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/nstankov-bg/oaievals-collector/pkg/timescaledb"
 )
 
 func TestEventHandler(t *testing.T) {
+	timescaledb.Initialize() // initialize TimescaleDB before running the test
+
 	req, err := http.NewRequest("POST", "/events", strings.NewReader(`{
         "run_id": "123",
         "type": "match",

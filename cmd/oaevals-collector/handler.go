@@ -10,6 +10,7 @@ import (
 	"github.com/nstankov-bg/oaievals-collector/pkg/influxdb"
 	"github.com/nstankov-bg/oaievals-collector/pkg/loki"
 	"github.com/nstankov-bg/oaievals-collector/pkg/monitoring"
+	"github.com/nstankov-bg/oaievals-collector/pkg/timescaledb" // Newly added import
 )
 
 var mon = monitoring.NewMonitoring()
@@ -61,6 +62,16 @@ func eventHandler(w http.ResponseWriter, r *http.Request) {
 		if lokiURL != "" {
 			// If set, write to Loki.
 			loki.WriteToLoki(event)
+		}
+
+		// Check if the environmental variable for TimescaleDB is set.
+		timescaleDBHost := os.Getenv("TIMESCALEDB_HOST")
+		if timescaleDBHost != "" {
+			// If set, write to TimescaleDB.
+			err := timescaledb.WriteToTimescaleDB(event)
+			if err != nil {
+				log.Printf("Failed to write event to TimescaleDB: %v", err)
+			}
 		}
 	}
 

@@ -1,0 +1,28 @@
+# ignore git and cache files
+.git
+.gitignore
+
+# ignore logs
+*.log
+
+# ignore binary files
+bin/*
+
+# ignore temporary files
+tmp/*
+*.tmp
+
+# ignore test and coverage files
+*_test.go
+coverage.out
+
+# ignore data
+data/
+cmd/oaevals-collector/data/
+
+# ignore processed files
+processed/
+cmd/oaevals-collector/processed/
+
+# ignore all markdown files
+*.md

@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	kitlog "github.com/go-kit/kit/log"
+	kitlog "github.com/go-kit/log"
 	flagext "github.com/grafana/dskit/flagext"
 	"github.com/grafana/loki/clients/pkg/promtail/api"
 	"github.com/grafana/loki/clients/pkg/promtail/client"
@@ -65,7 +65,7 @@ func init() {
 	logger := kitlog.NewLogfmtLogger(kitlog.NewSyncWriter(os.Stderr))
 
 	// Please replace the placeholders with suitable arguments
-	var reg = prometheus.NewPedanticRegistry()
+	reg := prometheus.NewPedanticRegistry()
 	metrics := client.NewMetrics(reg)
 	realClient, err := client.New(metrics, config, 0, 0, false, logger)
 	if err != nil {

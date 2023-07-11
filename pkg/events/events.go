@@ -1,9 +1,6 @@
-
 package events
 
-
 type Data map[string]interface{}
-
 
 type Event struct {
 	RunID     string `json:"run_id"`

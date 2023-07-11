@@ -38,7 +38,7 @@ func init() {
 
 func createDirIfNotExist(dir string) error {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		return os.MkdirAll(dir, 0755)
+		return os.MkdirAll(dir, 0o755)
 	}
 	return nil
 }
