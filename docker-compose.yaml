@@ -15,6 +15,16 @@ services:
     ports:
       - "8086:8086"
 
+  timescaledb:
+    image: timescale/timescaledb-ha:pg14-latest
+    environment:
+      POSTGRES_PASSWORD: my-password
+      POSTGRES_DB: mydatabase
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   loki:
     image: grafana/loki:latest
     ports:
@@ -29,12 +39,16 @@ services:
     depends_on:
       - db
       - loki
+      - timescaledb
     environment:
       INFLUXDB_HOST: http://db:8086
       INFLUXDB_USER: my-user
       INFLUXDB_TOKEN: WlzWM122bT1CvsLTNsgivIIKWaEBo6F1w2tLzmfaQSEDQ6XQkFhBeSwJCeHBxYGKonhRKCIL8ird9T7CfkSoJw==
       INFLUXDB_ORG: my-org
       INFLUXDB_BUCKET: my-bucket
+      TIMESCALEDB_HOST: postgres://postgres:my-password@timescaledb:5432/mydatabase
+      TIMESCALEDB_USER: postgres
+      TIMESCALEDB_PASSWORD: my-password
       LOKI_URL: http://loki:3100/loki/api/v1/push
     ports:
       - "8081:8080"
@@ -50,10 +64,12 @@ services:
     depends_on:
       - db
       - loki
+      - timescaledb
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
 
 volumes:
   influxdb_data:
+  timescaledb_data:
   grafana_data:

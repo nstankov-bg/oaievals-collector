@@ -1,7 +1,6 @@
 package oaievals_collector
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -11,25 +10,27 @@ import (
 
 func TestProcessFile(t *testing.T) {
 	// Setup
-	tmpDir, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(tmpDir)
+	tmpDir := os.TempDir()
 
 	dataDir = tmpDir
 	processedDir = filepath.Join(tmpDir, "processed")
-	os.MkdirAll(processedDir, 0755) // Create the processed directory
+	err := os.MkdirAll(processedDir, 0o755) // Create the processed directory
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	testFileContent := `{"run_id":"testRun", "type":"match", "data":{"correct":true}}`
 	testFileName := "testFile"
-	err = ioutil.WriteFile(filepath.Join(dataDir, testFileName), []byte(testFileContent), 0644)
+	err = os.WriteFile(filepath.Join(dataDir, testFileName), []byte(testFileContent), 0o644)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Act
-	fileInfo, _ := os.Stat(filepath.Join(dataDir, testFileName))
+	fileInfo, err := os.Stat(filepath.Join(dataDir, testFileName))
+	if err != nil {
+		t.Fatal(err)
+	}
 	processFile(fileInfo)
 
 	// Assert
@@ -44,10 +45,7 @@ func TestProcessFile(t *testing.T) {
 
 func TestProcessFile_ErrorOpeningFile(t *testing.T) {
 	// Setup
-	tmpDir, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatal(err)
-	}
+	tmpDir := os.TempDir()
 	defer os.RemoveAll(tmpDir)
 
 	dataDir = tmpDir
