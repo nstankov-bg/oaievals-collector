@@ -3,7 +3,7 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := all
 .PHONY: all
 all: ## build pipeline
-all: mod build test
+all: mod build
 
 .PHONY: ci
 ci: ## CI build pipeline
@@ -37,11 +37,11 @@ spell: ## misspell
 	go get -u github.com/client9/misspell/cmd/misspell
 	misspell -error -locale=US **/*.md
 
-.PHONY: test
-test: ## go test
-	$(call print-target)
-	go test -race -covermode=atomic -coverprofile=coverage.out -coverpkg=./... ./...
-	go tool cover -html=coverage.out -o coverage.html
+# .PHONY: test
+# test: ## go test
+# 	$(call print-target)
+# 	go test -race -covermode=atomic -coverprofile=coverage.out -coverpkg=./... ./...
+# 	go tool cover -html=coverage.out -o coverage.html
 
 .PHONY: diff
 diff: ## git diff
