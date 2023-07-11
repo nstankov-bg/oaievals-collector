@@ -3,7 +3,7 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := all
 .PHONY: all
 all: ## build pipeline
-all: mod build lint test
+all: mod build test
 
 .PHONY: ci
 ci: ## CI build pipeline
@@ -36,12 +36,6 @@ spell: ## misspell
 	$(call print-target)
 	go get -u github.com/client9/misspell/cmd/misspell
 	misspell -error -locale=US **/*.md
-
-.PHONY: lint
-lint: ## golangci-lint
-	$(call print-target)
-	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-	golangci-lint run --fix
 
 .PHONY: test
 test: ## go test
