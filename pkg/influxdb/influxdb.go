@@ -1,9 +1,10 @@
 package influxdb
 
 import (
+	"log"
 	"os"
 	"time"
-	"log"
+
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api"
 	"github.com/influxdata/influxdb-client-go/v2/api/write"
@@ -50,35 +51,34 @@ func init() {
 }
 
 func WriteToInfluxDB(event events.Event) {
-    // get non-blocking write client
-    writeAPI := client.WriteAPI(os.Getenv("INFLUXDB_ORG"), os.Getenv("INFLUXDB_BUCKET"))
+	// get non-blocking write client
+	writeAPI := client.WriteAPI(os.Getenv("INFLUXDB_ORG"), os.Getenv("INFLUXDB_BUCKET"))
 
-    // create point
-    p := influxdb2.NewPointWithMeasurement("events").
-        AddTag("run_id", event.RunID).
-        AddField("event_id", event.EventID).
-        AddField("sample_id", event.SampleID).
-        SetTime(time.Now())
-    
-    // Add additional fields based on the data in the event
-    for key, value := range event.Data {
-        switch v := value.(type) {
-        case bool:
-            p.AddField(key, v)
-        case string:
-            p.AddField(key, v)
-        case float64:
-            p.AddField(key, v)
-        case int:
-            p.AddField(key, v)
-        default:
-            log.Printf("Unsupported type for field %s", key)
-        }
-    }
+	// create point
+	p := influxdb2.NewPointWithMeasurement("events").
+		AddTag("run_id", event.RunID).
+		AddField("event_id", event.EventID).
+		AddField("sample_id", event.SampleID).
+		SetTime(time.Now())
 
-    // write point immediately
-    writeAPI.WritePoint(p)
-    // Ensures background processes finishes
-    writeAPI.Flush()
+	// Add additional fields based on the data in the event
+	for key, value := range event.Data {
+		switch v := value.(type) {
+		case bool:
+			p.AddField(key, v)
+		case string:
+			p.AddField(key, v)
+		case float64:
+			p.AddField(key, v)
+		case int:
+			p.AddField(key, v)
+		default:
+			log.Printf("Unsupported type for field %s", key)
+		}
+	}
+
+	// write point immediately
+	writeAPI.WritePoint(p)
+	// Ensures background processes finishes
+	writeAPI.Flush()
 }
-

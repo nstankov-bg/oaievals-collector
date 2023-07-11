@@ -3,9 +3,10 @@ package influxdb
 import (
 	"os"
 	"testing"
-	"github.com/stretchr/testify/mock"
-	"github.com/nstankov-bg/oaievals-collector/pkg/events"
+
 	"github.com/influxdata/influxdb-client-go/v2/api/write"
+	"github.com/nstankov-bg/oaievals-collector/pkg/events"
+	"github.com/stretchr/testify/mock"
 )
 
 type MockClient struct {
@@ -31,9 +32,9 @@ func (m *MockWriteAPI) Flush() {
 
 func TestWriteToInfluxDB(t *testing.T) {
 	os.Setenv("INFLUXDB_HOST", "http://localhost:8086")
-    os.Setenv("INFLUXDB_ORG", "your-org")
-    os.Setenv("INFLUXDB_BUCKET", "your-bucket")
-    os.Setenv("INFLUXDB_TOKEN", "your-token")
+	os.Setenv("INFLUXDB_ORG", "your-org")
+	os.Setenv("INFLUXDB_BUCKET", "your-bucket")
+	os.Setenv("INFLUXDB_TOKEN", "your-token")
 
 	mockClient := new(MockClient)
 	client = mockClient
@@ -58,8 +59,8 @@ func TestWriteToInfluxDB(t *testing.T) {
 	mockWriteAPI.AssertCalled(t, "WritePoint", mock.AnythingOfType("*write.Point"))
 	mockWriteAPI.AssertCalled(t, "Flush")
 
-    os.Unsetenv("INFLUXDB_HOST")
-    os.Unsetenv("INFLUXDB_ORG")
-    os.Unsetenv("INFLUXDB_BUCKET")
-    os.Unsetenv("INFLUXDB_TOKEN")
+	os.Unsetenv("INFLUXDB_HOST")
+	os.Unsetenv("INFLUXDB_ORG")
+	os.Unsetenv("INFLUXDB_BUCKET")
+	os.Unsetenv("INFLUXDB_TOKEN")
 }

@@ -6,16 +6,47 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
 	"github.com/nstankov-bg/oaievals-collector/pkg/influxdb"
 )
 
+var (
+	dataDir      string
+	processedDir string
+)
+
+func init() {
+	baseDir := os.Getenv("WATCHED_FOLDER")
+
+	if baseDir == "" {
+		baseDir, _ = filepath.Abs(".")
+	}
+
+	dataDir = filepath.Join(baseDir, "data")
+	processedDir = filepath.Join(baseDir, "data/processed")
+
+	if err := createDirIfNotExist(dataDir); err != nil {
+		log.Fatalf("Failed to create directory %s: %v", dataDir, err)
+	}
+
+	if err := createDirIfNotExist(processedDir); err != nil {
+		log.Fatalf("Failed to create directory %s: %v", processedDir, err)
+	}
+}
+
+func createDirIfNotExist(dir string) error {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		return os.MkdirAll(dir, 0755)
+	}
+	return nil
+}
+
 func ProcessFilesInDirectory() {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to create watcher: %v", err)
 	}
 	defer watcher.Close()
 
@@ -23,35 +54,37 @@ func ProcessFilesInDirectory() {
 	go func() {
 		for {
 			select {
-			case event := <-watcher.Events:
-				log.Println("Event: ", event)
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
 				if event.Op&fsnotify.Write == fsnotify.Write {
-					log.Println("Modified file: ", event.Name)
 					fileInfo, err := os.Stat(event.Name)
 					if err != nil {
-						log.Println("Error getting file info: ", err)
+						log.Printf("Error getting file info for %s: %v", event.Name, err)
 						continue
 					}
 					processFile(fileInfo)
 				}
-			case err := <-watcher.Errors:
-				log.Println("Error: ", err)
+			case err, ok := <-watcher.Errors:
+				if ok {
+					log.Printf("Error: %v", err)
+				}
 			}
 		}
 	}()
 
-	err = watcher.Add("/data")
-	if err != nil {
-		log.Fatal(err)
+	if err = watcher.Add(dataDir); err != nil {
+		log.Fatalf("Failed to add directory to watcher: %v", err)
 	}
 	<-done
 }
 
 func processFile(fileInfo os.FileInfo) {
-	filePath := filepath.Join("/data", fileInfo.Name())
+	filePath := filepath.Join(dataDir, fileInfo.Name())
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Println("Error opening file: ", err)
+		log.Printf("Error opening file %s: %v", filePath, err)
 		return
 	}
 	defer file.Close()
@@ -59,42 +92,38 @@ func processFile(fileInfo os.FileInfo) {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		var event events.Event
-		if err := json.Unmarshal(scanner.Bytes(), &event); err != nil {
-			log.Println("Error unmarshalling event from file: ", err)
+		if err = json.Unmarshal(scanner.Bytes(), &event); err != nil {
+			log.Printf("Error unmarshalling event from file %s: %v", filePath, err)
 			continue
 		}
 		processEvent(event)
 	}
 
-	if err := scanner.Err(); err != nil {
-		log.Println("Error reading file: ", err)
+	if err = scanner.Err(); err != nil {
+		log.Printf("Error reading file %s: %v", filePath, err)
 	}
 
-	newPath := filepath.Join("/data/processed", fileInfo.Name())
-	if err := os.Rename(filePath, newPath); err != nil {
-		log.Println("Error moving file: ", err)
+	newPath := filepath.Join(processedDir, fileInfo.Name())
+	if err = os.Rename(filePath, newPath); err != nil {
+		log.Printf("Error moving file from %s to %s: %v", filePath, newPath, err)
 	}
 }
 
 func processEvent(event events.Event) {
-	log.Println("Processing event of type: ", event.Type)
+	log.Printf("Processing event of type: %s", event.Type)
 	if event.Type == "match" {
-		correctVal, exists := event.Data["correct"]
-		if exists {
-			correct, ok := correctVal.(bool)
-			if ok {
+		if correctVal, exists := event.Data["correct"]; exists {
+			if correct, ok := correctVal.(bool); ok {
 				if correct {
 					mon.EventCounter.WithLabelValues(event.RunID, "true").Inc()
-					log.Println("Incremented event counter for: ", event.RunID, "with correctness: true")
 				} else {
 					mon.EventCounter.WithLabelValues(event.RunID, "false").Inc()
-					log.Println("Incremented event counter for: ", event.RunID, "with correctness: false")
 				}
 			} else {
-				log.Println("The 'correct' value is not a boolean")
+				log.Printf("The 'correct' value in event %v is not a boolean", event)
 			}
 		} else {
-			log.Println("The 'correct' key does not exist in the data")
+			log.Printf("The 'correct' key does not exist in the data of event %v", event)
 		}
 
 		influxdb.WriteToInfluxDB(event)

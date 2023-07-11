@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   db:
+    # platform: linux/arm64
     image: influxdb:latest
     environment:
       DOCKER_INFLUXDB_INIT_MODE: setup
@@ -14,6 +15,11 @@ services:
     ports:
       - "8086:8086"
 
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+
   oaievals-collector:
     platform: linux/arm64
     build: .
@@ -22,14 +28,32 @@ services:
       - ./data:/data
     depends_on:
       - db
+      - loki
     environment:
       INFLUXDB_HOST: http://db:8086
       INFLUXDB_USER: my-user
       INFLUXDB_TOKEN: WlzWM122bT1CvsLTNsgivIIKWaEBo6F1w2tLzmfaQSEDQ6XQkFhBeSwJCeHBxYGKonhRKCIL8ird9T7CfkSoJw==
       INFLUXDB_ORG: my-org
       INFLUXDB_BUCKET: my-bucket
+      LOKI_URL: http://loki:3100/loki/api/v1/push
     ports:
-      - "8080:8080"
+      - "8081:8080"
+
+  ##Grafana
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - loki
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
 
 volumes:
   influxdb_data:
+  grafana_data:
