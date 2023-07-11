@@ -4,53 +4,61 @@ import (
 	"testing"
 	"time"
 
+	"github.com/grafana/loki/clients/pkg/promtail/api"
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
 	"github.com/prometheus/common/model"
-	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/assert"
 )
 
-// Define a mock struct to be used in your unit tests of myFunc.
+// MockClient is a mock implementation of the Client interface for testing
 type MockClient struct {
-	mock.Mock
+	received chan api.Entry
 }
 
-// Mock the Handle method
-func (m *MockClient) Handle(labels model.LabelSet, t time.Time, line string) error {
-	args := m.Called(labels, t, line)
-	return args.Error(0)
+func (m *MockClient) Chan() chan<- api.Entry {
+	return m.received
+}
+
+func (m *MockClient) Stop() {}
+
+func (m *MockClient) Name() string {
+	return "mock"
 }
 
 func TestWriteToLoki(t *testing.T) {
-	// create an instance of our test object
-	mockClient := new(MockClient)
+	// Set up a mock Loki client
+	mockClient := &MockClient{
+		received: make(chan api.Entry, 1),
+	}
+	lokiClient = mockClient
 
-	// setup expectations
-	mockEvent := events.Event{
-		RunID:    "testRun",
-		EventID:  456,
-		SampleID: "testSample",
+	// Create a test event
+	event := events.Event{
+		RunID:    "run1",
+		EventID:  123,
+		SampleID: "sample1",
 		Data: map[string]interface{}{
-			"testKey": "testValue",
+			"key1": "value1",
+			"key2": "value2",
 		},
 	}
 
-	expectedLabels := model.LabelSet{
-		"job":       model.LabelValue("MYJOB"),
-		"run_id":    model.LabelValue("testRun"),
-		"event_id":  model.LabelValue("456"), // Adjusted to match the mockEvent EventID
-		"sample_id": model.LabelValue("testSample"),
+	// Call the function under test
+	WriteToLoki(event)
+
+	// Assert that a log entry was received by the mock client
+	select {
+	case entry := <-mockClient.received:
+		expectedLabels := model.LabelSet{
+			"job":       "MYJOB",
+			"run_id":    "run1",
+			"event_id":  "123",
+			"sample_id": "sample1",
+		}
+		assert.Equal(t, expectedLabels, entry.Labels)
+		assert.Contains(t, entry.Entry.Line, "key1: value1")
+		assert.Contains(t, entry.Entry.Line, "key2: value2")
+	case <-time.After(time.Second):
+		t.Fatal("No log entry received by mock client")
 	}
-
-	expectedLogLine := "testKey: testValue "
-
-	mockClient.On("Handle", expectedLabels, mock.AnythingOfType("time.Time"), expectedLogLine).Return(nil)
-
-	// set the global client variable to our mock client
-	lokiClient = mockClient
-
-	// call the code we are testing
-	WriteToLoki(mockEvent)
-
-	// assert that the expectations were met
-	mockClient.AssertExpectations(t)
 }

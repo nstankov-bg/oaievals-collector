@@ -7,23 +7,36 @@ import (
 	"os"
 	"time"
 
-	"github.com/cortexproject/cortex/pkg/util/flagext"
 	kitlog "github.com/go-kit/kit/log"
-	"github.com/grafana/loki/pkg/promtail/client"
+	flagext "github.com/grafana/dskit/flagext"
+	"github.com/grafana/loki/clients/pkg/promtail/api"
+	"github.com/grafana/loki/clients/pkg/promtail/client"
+	"github.com/grafana/loki/pkg/logproto"
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
 )
 
 type Client interface {
-	Handle(labels model.LabelSet, time time.Time, line string) error
+	Chan() chan<- api.Entry
+	Stop()
+	Name() string
 }
 
 type RealClient struct {
 	client client.Client
 }
 
-func (r *RealClient) Handle(labels model.LabelSet, t time.Time, line string) error {
-	return r.client.Handle(labels, t, line)
+func (r *RealClient) Chan() chan<- api.Entry {
+	return r.client.Chan()
+}
+
+func (r *RealClient) Stop() {
+	r.client.Stop()
+}
+
+func (r *RealClient) Name() string {
+	return r.client.Name()
 }
 
 var lokiClient Client
@@ -51,9 +64,16 @@ func init() {
 
 	logger := kitlog.NewLogfmtLogger(kitlog.NewSyncWriter(os.Stderr))
 
-	realClient, err := client.New(config, logger)
+	// Please replace the placeholders with suitable arguments
+	var reg = prometheus.NewPedanticRegistry()
+	metrics := client.NewMetrics(reg)
+	realClient, err := client.New(metrics, config, 0, 0, false, logger)
 	if err != nil {
 		log.Fatalf("Could not create Loki client: %s", err)
+	}
+
+	if realClient == nil {
+		log.Fatalf("Client is nil")
 	}
 
 	lokiClient = &RealClient{client: realClient}
@@ -61,7 +81,7 @@ func init() {
 
 func WriteToLoki(event events.Event) {
 	labels := model.LabelSet{
-		"job":       model.LabelValue(fmt.Sprint("MYJOB")),
+		"job":       model.LabelValue("MYJOB"),
 		"run_id":    model.LabelValue(fmt.Sprint(event.RunID)),
 		"event_id":  model.LabelValue(fmt.Sprint(event.EventID)),
 		"sample_id": model.LabelValue(fmt.Sprint(event.SampleID)),
@@ -71,12 +91,18 @@ func WriteToLoki(event events.Event) {
 
 	// Add additional fields based on the data in the event
 	for key, value := range event.Data {
-		logLine += fmt.Sprintf("%s: %v ", key, value)
+		logLine += key + ": " + fmt.Sprint(value) + " "
+	}
+
+	// Prepare the log entry
+	entry := api.Entry{
+		Labels: labels,
+		Entry: logproto.Entry{
+			Timestamp: time.Now(),
+			Line:      logLine,
+		},
 	}
 
 	// Log the message
-	err := lokiClient.Handle(labels, time.Now(), logLine)
-	if err != nil {
-		log.Fatalf("Could not send log to Loki: %s", err)
-	}
+	lokiClient.Chan() <- entry
 }

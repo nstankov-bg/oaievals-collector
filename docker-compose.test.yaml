@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  db:
+    image: influxdb:latest
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: my-user
+      DOCKER_INFLUXDB_INIT_PASSWORD: my-password
+      DOCKER_INFLUXDB_INIT_ORG: my-org
+      DOCKER_INFLUXDB_INIT_BUCKET: my-bucket
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    ports:
+      - "8086:8086"
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+
+  oaievals-collector:
+    build: .
+    restart: always
+    volumes:
+      - ./data:/data
+    depends_on:
+      - db
+      - loki
+    environment:
+      INFLUXDB_HOST: http://db:8086
+      INFLUXDB_USER: my-user
+      INFLUXDB_TOKEN: WlzWM122bT1CvsLTNsgivIIKWaEBo6F1w2tLzmfaQSEDQ6XQkFhBeSwJCeHBxYGKonhRKCIL8ird9T7CfkSoJw==
+      INFLUXDB_ORG: my-org
+      INFLUXDB_BUCKET: my-bucket
+      LOKI_URL: http://loki:3100/loki/api/v1/push
+    ports:
+      - "8081:8080"
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - loki
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+
+  build:
+    platform: linux/amd64
+    image: golang:1.19
+    volumes:
+      - .:/go/src/oaievals-collector
+      - go-build:/go/pkg
+    working_dir: /go/src/oaievals-collector
+    command: bash -c "make all"
+
+volumes:
+  influxdb_data:
+  grafana_data:
+  go-build:
