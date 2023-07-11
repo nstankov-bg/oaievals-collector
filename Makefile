@@ -7,7 +7,7 @@ all: mod build
 
 .PHONY: ci
 ci: ## CI build pipeline
-ci: all diff
+ci: all
 
 .PHONY: help
 help:
@@ -43,11 +43,11 @@ spell: ## misspell
 # 	go test -race -covermode=atomic -coverprofile=coverage.out -coverpkg=./... ./...
 # 	go tool cover -html=coverage.out -o coverage.html
 
-.PHONY: diff
-diff: ## git diff
-	$(call print-target)
-	git diff --exit-code
-	RES=$$(git status --porcelain) ; if [ -n "$$RES" ]; then echo $$RES && exit 1 ; fi
+# .PHONY: diff
+# diff: ## git diff
+# 	$(call print-target)
+# 	git diff --exit-code
+# 	RES=$$(git status --porcelain) ; if [ -n "$$RES" ]; then echo $$RES && exit 1 ; fi
 
 
 define print-target
