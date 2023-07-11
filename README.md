@@ -15,9 +15,9 @@
 
 ## Introduction
 
-The OAIEvals Collector is a Go application specifically designed to collect and store raw evaluation metrics. It provides an HTTP handler & FileSystem Watcher for receiving metric data, a set of utilities for event handling and monitoring, and supports containerized deployment with Docker for ease of use and scalability. 
+The OAIEvals Collector is a Go application specifically designed to collect and store raw evaluation metrics. It provides an HTTP handler & FileSystem Watcher for receiving metric data, a set of utilities for event handling and monitoring, and supports containerized deployment with Docker for ease of use and scalability.
 
-It integrates seamlessly with InfluxDB for robust and efficient storage of numeric-based time series data. Additionally, the collector has support for Loki, a system for storing and retrieving log data, providing context and qualitative information around numeric metrics. Both systems can be used independently or together, depending on the nature of the metrics and the requirements of your system.
+The application integrates seamlessly with InfluxDB for robust and efficient storage of numeric-based time series data, Loki for storing and retrieving log data, providing context and qualitative information around numeric metrics, and now with TimescaleDB for storing and managing event data. All three systems can be used independently or together, depending on the nature of the metrics and the requirements of your system.
 
 The purpose of the OAIEvals Collector is to facilitate the monitoring and evaluation process by providing a one-stop solution for metric collection.
 
@@ -41,26 +41,26 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 
 **Start Services:**
 
-1. Run `docker-compose up` to start the OAIEvals Collector, InfluxDB, and Loki. Docker will pull the images (if not already present) and build the OAIEvals Collector image.
+1. Run `docker-compose up` to start the OAIEvals Collector, InfluxDB, Loki, and TimescaleDB. Docker will pull the images (if not already present) and build the OAIEvals Collector image.
 
-**InfluxDB & Loki Setup:**
+**InfluxDB, Loki & TimescaleDB Setup:**
 
-1. While the services are spinning up, navigate to your InfluxDB and Loki instances and generate an authentication token. These tokens will be used by the OAIEvals Collector to connect and interact with the databases.
+1. While the services are spinning up, navigate to your InfluxDB, Loki and TimescaleDB instances and generate an authentication token. These tokens will be used by the OAIEvals Collector to connect and interact with the databases.
 
 **Configuration Setup:**
 
 1. Once you've obtained the tokens, stop the running Docker Compose services (using CTRL+C or `docker-compose down` command).
-2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here` and `LOKI_TOKEN=your_token_here` with the tokens obtained from InfluxDB and Loki respectively.
+2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_TOKEN=your_token_here`, and `TIMESCALEDB_HOST=your_token_here` with the tokens obtained from InfluxDB, Loki, and TimescaleDB respectively.
 
 **Restart Services:**
 
-1. Re-run `docker-compose up`. Now, the OAIEvals Collector should be able to connect to the InfluxDB and Loki with the provided tokens.
+1. Re-run `docker-compose up`. Now, the OAIEvals Collector should be able to connect to the InfluxDB, Loki, and TimescaleDB with the provided tokens.
 
 **Test the Application:**
 
 You can test the OAIEvals Collector by sending a POST request with a payload representing an event. For instance:
 
-```shell
+"shell
 curl -X POST -H "Content-Type: application/json" -d '
 {
   "run_id": "2307080128125Q6U7IFP",
@@ -76,17 +76,17 @@ curl -X POST -H "Content-Type: application/json" -d '
   "created_by": "",
   "created_at": "2023-07-08 01:28:13.704853+00:00"
 }' http://localhost:8080/events
-```
+"
 
 ## Dependencies
 
-The OAIEvals Collector relies on [InfluxDB](https://www.influxdata.com/) and [Loki](https://grafana.com/oss/loki/) for storing collected metrics. Ensure you have instances of InfluxDB and Loki available for the application to connect to.
+The OAIEvals Collector relies on [InfluxDB](https://www.influxdata.com/), [Loki](https://grafana.com/oss/loki/), and [TimescaleDB](https://www.timescale.com/) for storing collected metrics. Ensure you have instances of InfluxDB, Loki, and TimescaleDB available for the application to connect to.
 
 ## Build and Run
 
 ### With Docker Compose
 
-A Docker Compose file is provided for convenience, which will start up both the application and instances of InfluxDB and Loki:
+A Docker Compose file is provided for convenience, which will start up the application and instances of InfluxDB, Loki, and TimescaleDB:
 
 1. Build and start the services: `docker-compose up --build`
 
