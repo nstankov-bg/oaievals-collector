@@ -47,8 +47,6 @@ services:
       INFLUXDB_ORG: my-org
       INFLUXDB_BUCKET: my-bucket
       TIMESCALEDB_HOST: postgres://postgres:my-password@timescaledb:5432/mydatabase
-      TIMESCALEDB_USER: postgres
-      TIMESCALEDB_PASSWORD: my-password
       LOKI_URL: http://loki:3100/loki/api/v1/push
     ports:
       - "8081:8080"

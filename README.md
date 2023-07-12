@@ -50,7 +50,7 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 **Configuration Setup:**
 
 1. Once you've obtained the tokens, stop the running Docker Compose services (using CTRL+C or `docker-compose down` command).
-2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_TOKEN=your_token_here`, and `TIMESCALEDB_HOST=your_token_here` with the tokens obtained from InfluxDB, Loki, and TimescaleDB respectively.
+2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_HOST=your_loki_host`, and `TIMESCALEDB_HOST=your_db_connection string` with the creds or endpoints obtained from InfluxDB, Loki, and TimescaleDB respectively.
 
 **Restart Services:**
 
@@ -60,7 +60,7 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 
 You can test the OAIEvals Collector by sending a POST request with a payload representing an event. For instance:
 
-"shell
+```shell
 curl -X POST -H "Content-Type: application/json" -d '
 {
   "run_id": "2307080128125Q6U7IFP",
@@ -76,7 +76,7 @@ curl -X POST -H "Content-Type: application/json" -d '
   "created_by": "",
   "created_at": "2023-07-08 01:28:13.704853+00:00"
 }' http://localhost:8080/events
-"
+```
 
 ## Dependencies
 
