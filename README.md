@@ -41,7 +41,7 @@ The purpose of the OAIEvals Collector is to facilitate the monitoring and evalua
 
 Before you can run the OAIEvals Collector, you'll need to have the following installed:
 
-- [Go](https://golang.org/dl/) (version 1.14 or later)
+- [Go](https://golang.org/dl/) (version 1.20 or later)
 - [Docker](https://www.docker.com/products/docker-desktop) (version 20.10 or later)
 - [Docker Compose](https://docs.docker.com/compose/install/) (version 1.28 or later)
 
