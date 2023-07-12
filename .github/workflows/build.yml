@@ -32,6 +32,14 @@ jobs:
           name: coverage-${{ matrix.os }}
           path: coverage.*
 
+      # Install goreleaser before trying to run it
+      - name: Setup goreleaser
+        uses: goreleaser/goreleaser-action@v3
+        if: ${{ runner.os == 'Linux' }}
+        with:
+          version: latest
+          args: check
+
       - run: goreleaser release --rm-dist --snapshot
         if: ${{ runner.os == 'Linux' }}
 
