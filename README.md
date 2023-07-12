@@ -42,7 +42,7 @@ The latest addition to the list of integrations is Kafka. This enables the appli
 **Kafka:**
 | Kafka Test |
 | :---: |
-| *Basic Visualization via InfluxDB & TimeScaleDB*
+| *Basic Visualization via Kafka UI*
 | !<img width="1505" alt="Screenshot 2023-07-12 at 4 35 03 PM" src="https://github.com/nstankov-bg/oaievals-collector/assets/27363885/e8075f06-b628-4773-99d9-a032e28f2472">
 
 
