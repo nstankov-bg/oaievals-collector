@@ -26,22 +26,21 @@ jobs:
 
       - name: Build
         run: make ci
+        
       - name: Upload coverage
         uses: actions/upload-artifact@v3
         with:
           name: coverage-${{ matrix.os }}
           path: coverage.*
 
-      # Install goreleaser before trying to run it
-      - name: Setup goreleaser
-        uses: goreleaser/goreleaser-action@v3
-        if: ${{ runner.os == 'Linux' }}
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v4
         with:
+          distribution: goreleaser
           version: latest
-          args: check
-
-      - run: goreleaser release --rm-dist --snapshot
-        if: ${{ runner.os == 'Linux' }}
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload dist
         uses: actions/upload-artifact@v3
