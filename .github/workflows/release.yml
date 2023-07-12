@@ -1,41 +1,35 @@
-name: release
+name: Release Tags
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
+  pull_request:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+  id-token: write
+  packages: write
 
 jobs:
-  goreleaser:
-    permissions:
-      contents: write
-      packages: write
+  release:
     runs-on: ubuntu-latest
+    env:
+      flags: ""
     steps:
+      - if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        run: echo "flags=--snapshot" >> $GITHUB_ENV
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v3
         with:
-          go-version: "1.20"
-
-      - run: make inst
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+          go-version: 1.20
+          cache: true
+      - uses: goreleaser/goreleaser-action@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: goreleaser release
+          distribution: goreleaser
+          version: latest
+          args: release --clean ${{ env.flags }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload dist
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist
