@@ -1,13 +1,13 @@
 # OAIEvals Collector
 
 [![Keep a Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-%23E05735)](CHANGELOG.md)
-[![GitHub Release](https://img.shields.io/github/v/release/oaievals-collector/seed)](https://github.com/oaievals-collector/seed/releases)
-[![Go Reference](https://pkg.go.dev/badge/github.com/oaievals-collector/seed.svg)](https://pkg.go.dev/github.com/oaievals-collector/seed)
-[![go.mod](https://img.shields.io/github/go-mod/go-version/oaievals-collector/seed)](go.mod)
-[![LICENSE](https://img.shields.io/github/license/oaievals-collector/seed)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/oaievals-collector/seed/build.yml?branch=main)](https://github.com/oaievals-collector/seed/actions?query=workflow%3Abuild+branch%3Amain)
-[![Go Report Card](https://goreportcard.com/badge/github.com/oaievals-collector/seed)](https://goreportcard.com/report/github.com/oaievals-collector/seed)
-[![Codecov](https://codecov.io/gh/oaievals-collector/seed/branch/main/graph/badge.svg)](https://codecov.io/gh/oaievals-collector/seed)
+[![GitHub Release](https://img.shields.io/github/v/release/nstankov-bg/oaievals-collector)](https://github.com/nstankov-bg/oaievals-collector/releases)
+[![Go Reference](https://pkg.go.dev/badge/nstankov-bg/oaievals-collector.svg)](https://pkg.go.dev/github.com/nstankov-bg/oaievals-collector)
+[![go.mod](https://img.shields.io/github/go-mod/go-version/nstankov-bg/oaievals-collector)](go.mod)
+[![LICENSE](https://img.shields.io/github/license/nstankov-bg/oaievals-collector)](LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/oaievals-collector/build-n-push.yml?branch=main)](https://github.com/nstankov-bg/oaievals-collector/actions?query=workflow%3Abuild+branch%3Amain)
+[![Go Report Card](https://goreportcard.com/badge/github.com/nstankov-bg/oaievals-collector)](https://goreportcard.com/report/github.com/nstankov-bg/oaievals-collector)
+[![Codecov](https://codecov.io/gh/nstankov-bg/oaievals-collector/branch/main/graph/badge.svg)](https://codecov.io/gh/nstankov-bg/oaievals-collector)
 
 ⭐ `Star` this repository if you find it valuable and worth maintaining.
 
