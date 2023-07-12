@@ -27,17 +27,26 @@ The latest addition to the list of integrations is Kafka. This enables the appli
 
 **InfluxDB:**
 
-| InfluxDB Image 1 | InfluxDB Image 2 |
+| InfluxDB Test 1 | InfluxDB Test 2 |
 | :---: | :---: |
 | ![InfluxDB Image 1](https://github.com/openai/evals/assets/27363885/f2359bce-5af2-49c6-a4dd-66e362ece63d) | ![InfluxDB Image 2](https://github.com/openai/evals/assets/27363885/be3c7361-2601-417d-a311-96c09da954c9) |
 
 
 **Grafana:**
 
-| Grafana Image |
+| Grafana Test |
 | :---: |
 | *Basic Visualization via InfluxDB & TimeScaleDB*
 | !<img width="1499" alt="Screenshot 2023-07-11 at 10 03 17 PM" src="https://github.com/nstankov-bg/oaievals-collector/assets/27363885/cd119b1a-939c-4f2d-b141-d26e83784cbc"> 
+
+**Kafka:**
+| Kafka Test |
+| :---: |
+| *Basic Visualization via InfluxDB & TimeScaleDB*
+| !<img width="1505" alt="Screenshot 2023-07-12 at 4 35 03 PM" src="https://github.com/nstankov-bg/oaievals-collector/assets/27363885/e8075f06-b628-4773-99d9-a032e28f2472">
+
+
+
 
 ## Prerequisites
 
