@@ -53,7 +53,11 @@ func TestWriteToTimescaleDB(t *testing.T) {
 	require.Equal(t, event.RunID, runID)
 	require.Equal(t, event.EventID, eventID)
 	require.Equal(t, event.SampleID, sampleID)
-	require.Equal(t, event.Data, data)
+
+	// Compare event.Data and data as JSON strings
+	expectedDataJson, _ := json.Marshal(event.Data)
+	actualDataJson, _ := json.Marshal(data)
+	require.Equal(t, string(expectedDataJson), string(actualDataJson))
 
 	// We only check if the readTime is not zero value.
 	// It is not feasible to compare the exact time due to possible delay between insertion and selection.

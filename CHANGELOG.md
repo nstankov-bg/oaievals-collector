@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Kafka support: We've added Kafka as a target for collecting and storing event data. The OAIEvals Collector can now connect, interact with Kafka, and write messages to Kafka topics at a high rate, thus handling large volumes of event data. The Kafka support includes the buffering of messages for faster ingestion and asynchronous writing. Required environment variable: `KAFKA_BOOTSTRAP_SERVERS`.
+
 ## [0.0.3-beta1] - 2023-07-11
 
 ### Added

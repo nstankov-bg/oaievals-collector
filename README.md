@@ -21,6 +21,8 @@ The application integrates seamlessly with InfluxDB for robust and efficient sto
 
 The purpose of the OAIEvals Collector is to facilitate the monitoring and evaluation process by providing a one-stop solution for metric collection.
 
+The latest addition to the list of integrations is Kafka. This enables the application to efficiently ingest and process a high volume of events in real-time, making it well-suited for systems that need to handle thousands of events per second. Kafka's robustness and scalability complement the existing storage solutions, providing a comprehensive data ingestion and storage solution.
+
 ## Demo:
 
 **InfluxDB:**
@@ -66,7 +68,7 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 **Configuration Setup:**
 
 1. Once you've obtained the tokens, stop the running Docker Compose services (using CTRL+C or `docker-compose down` command).
-2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_HOST=your_loki_host`, and `TIMESCALEDB_HOST=your_db_connection string` with the creds or endpoints obtained from InfluxDB, Loki, and TimescaleDB respectively.
+2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_HOST=your_loki_host`,`KAFKA_BOOTSTRAP_SERVERS=test1:9092` and `TIMESCALEDB_HOST=your_db_connection string` with the creds or endpoints obtained from InfluxDB, Loki, and TimescaleDB respectively.
 
 **Restart Services:**
 
