@@ -5,7 +5,7 @@
 [![Go Reference](https://pkg.go.dev/badge/nstankov-bg/oaievals-collector.svg)](https://pkg.go.dev/github.com/nstankov-bg/oaievals-collector)
 [![go.mod](https://img.shields.io/github/go-mod/go-version/nstankov-bg/oaievals-collector)](go.mod)
 [![LICENSE](https://img.shields.io/github/license/nstankov-bg/oaievals-collector)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/oaievals-collector/build-n-push.yml?branch=main)](https://github.com/nstankov-bg/oaievals-collector/actions?query=workflow%3Abuild+branch%3Amain)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/nstankov-bg/oaievals-collector/build-n-push.yml?branch=main)](https://github.com/nstankov-bg/oaievals-collector/actions?query=workflow%3Abuild+branch%3Amain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nstankov-bg/oaievals-collector)](https://goreportcard.com/report/github.com/nstankov-bg/oaievals-collector)
 [![Codecov](https://codecov.io/gh/nstankov-bg/oaievals-collector/branch/main/graph/badge.svg)](https://codecov.io/gh/nstankov-bg/oaievals-collector)
 
