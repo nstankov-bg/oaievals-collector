@@ -8,9 +8,10 @@ import (
 
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
 	"github.com/nstankov-bg/oaievals-collector/pkg/influxdb"
+	"github.com/nstankov-bg/oaievals-collector/pkg/kafka" // Newly added import
 	"github.com/nstankov-bg/oaievals-collector/pkg/loki"
 	"github.com/nstankov-bg/oaievals-collector/pkg/monitoring"
-	"github.com/nstankov-bg/oaievals-collector/pkg/timescaledb" // Newly added import
+	"github.com/nstankov-bg/oaievals-collector/pkg/timescaledb"
 )
 
 var mon = monitoring.NewMonitoring()
@@ -71,6 +72,16 @@ func eventHandler(w http.ResponseWriter, r *http.Request) {
 			err := timescaledb.WriteToTimescaleDB(event)
 			if err != nil {
 				log.Printf("Failed to write event to TimescaleDB: %v", err)
+			}
+		}
+
+		// Check if the environmental variable for Kafka is set.
+		kafkaBootstrapServers := os.Getenv("KAFKA_BOOTSTRAP_SERVERS")
+		if kafkaBootstrapServers != "" {
+			// If set, write to Kafka.
+			err := kafka.WriteToKafka(event)
+			if err != nil {
+				log.Printf("Failed to write event to Kafka: %v", err)
 			}
 		}
 	}
