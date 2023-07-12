@@ -21,6 +21,24 @@ The application integrates seamlessly with InfluxDB for robust and efficient sto
 
 The purpose of the OAIEvals Collector is to facilitate the monitoring and evaluation process by providing a one-stop solution for metric collection.
 
+## Demo:
+
+**InfluxDB:**
+
+| InfluxDB Image 1 | InfluxDB Image 2 |
+| :---: | :---: |
+| ![InfluxDB Image 1](https://github.com/openai/evals/assets/27363885/f2359bce-5af2-49c6-a4dd-66e362ece63d) | ![InfluxDB Image 2](https://github.com/openai/evals/assets/27363885/be3c7361-2601-417d-a311-96c09da954c9) |
+
+**Grafana:**
+
+| Grafana Image |
+| :---: |
+| *Visualization via InfluxDB*
+| ![Grafana Image](https://github.com/openai/evals/assets/27363885/a6a62012-536b-40e2-a70f-a803d55fc3a0) 
+| *Visualization via TimescaleDB*
+ ![Screenshot 2023-07-11 at 3 56 41 PM](https://github.com/openai/evals/assets/27363885/7eeea497-c91b-4b6b-80cb-da229b0d9887) |
+
+
 ## Prerequisites
 
 Before you can run the OAIEvals Collector, you'll need to have the following installed:
