@@ -8,8 +8,9 @@ import (
 
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
 	"github.com/nstankov-bg/oaievals-collector/pkg/influxdb"
-	"github.com/nstankov-bg/oaievals-collector/pkg/kafka" // Newly added import
+	"github.com/nstankov-bg/oaievals-collector/pkg/kafka"
 	"github.com/nstankov-bg/oaievals-collector/pkg/loki"
+	"github.com/nstankov-bg/oaievals-collector/pkg/mongodb" // Newly added import
 	"github.com/nstankov-bg/oaievals-collector/pkg/monitoring"
 	"github.com/nstankov-bg/oaievals-collector/pkg/timescaledb"
 )
@@ -30,7 +31,6 @@ func eventHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Processing event of type: ", event.Type)
 	if event.Type == "match" {
 		// Accessing the value "correct" from the map.
 		correctVal, exists := event.Data["correct"]
@@ -39,10 +39,8 @@ func eventHandler(w http.ResponseWriter, r *http.Request) {
 			if ok {
 				if correct {
 					mon.EventCounter.WithLabelValues(event.RunID, "true").Inc()
-					log.Println("Incremented event counter for: ", event.RunID, "with correctness: true")
 				} else {
 					mon.EventCounter.WithLabelValues(event.RunID, "false").Inc()
-					log.Println("Incremented event counter for: ", event.RunID, "with correctness: false")
 				}
 			} else {
 				log.Println("The 'correct' value is not a boolean")
@@ -82,6 +80,16 @@ func eventHandler(w http.ResponseWriter, r *http.Request) {
 			err := kafka.WriteToKafka(event)
 			if err != nil {
 				log.Printf("Failed to write event to Kafka: %v", err)
+			}
+		}
+
+		// Check if the environmental variable for MongoDB is set.
+		mongodbURI := os.Getenv("MONGODB_URI")
+		if mongodbURI != "" {
+			// If set, write to MongoDB.
+			err := mongodb.WriteToMongoDB(event)
+			if err != nil {
+				log.Printf("Failed to write event to MongoDB: %v", err)
 			}
 		}
 	}

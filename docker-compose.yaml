@@ -48,7 +48,12 @@ services:
       # INFLUXDB_BUCKET: my-bucket
       # TIMESCALEDB_HOST: postgres://postgres:my-password@timescaledb:5432/mydatabase
       # LOKI_URL: http://loki:3100/loki/api/v1/push
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      # KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      MONGODB_URI: ${MONGODB_URI:-mongodb:27017}
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-mydatabase}
+      MONGODB_USERNAME: ${MONGODB_USERNAME:-user}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD:-password}
+      MONGODB_COLLECTION: ${MONGODB_COLLECTION:-mycollection}
     ports:
       - "8081:8080"
 
@@ -67,6 +72,15 @@ services:
     environment:
       DYNAMIC_CONFIG_ENABLED: true
 
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MONGODB_DATABASE=${MONGODB_DATABASE:-mydatabase}
+      - MONGODB_USERNAME=${MONGODB_USERNAME:-user}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD:-password}
+    ports:
+      - '27017:27017'
   ##Grafana
   grafana:
     image: grafana/grafana:latest
