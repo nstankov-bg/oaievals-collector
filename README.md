@@ -72,7 +72,7 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 
 **InfluxDB, Loki & TimescaleDB Setup:**
 
-1. While the services are spinning up, navigate to your InfluxDB, Loki and TimescaleDB instances and generate an authentication token. These tokens will be used by the OAIEvals Collector to connect and interact with the databases.
+1. While the services are spinning up, navigate to your InfluxDB instance and generate an authentication token. These token will be used by the OAIEvals Collector to connect and interact with the database.
 
 **Configuration Setup:**
 
