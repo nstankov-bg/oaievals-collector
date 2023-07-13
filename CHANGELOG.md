@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integration with InfluxDB: For robust and efficient data storage, we've integrated the collector with InfluxDB to handle numeric-based time series data.
 - Containerized Deployment: The application supports deployment with Docker and orchestration with Docker Compose, making it easy to use and scalable.
 
-[Unreleased]: https://github.com/oaievals-collector/seed/compare/0.0.3-beta1...HEAD
-[0.0.3-beta1]: https://github.com/oaievals-collector/seed/compare/0.0.2-beta1...0.0.3-beta1
-[0.0.2-beta1]: https://github.com/oaievals-collector/seed/compare/0.0.1-beta1...0.0.2-beta1
-[0.0.1-beta1]: https://github.com/oaievals-collector/seed/releases/tag/0.0.1-beta1
+[Unreleased]: https://github.com/oaievals-collector/compare/0.0.3-beta1...HEAD
+[0.0.3-beta1]: https://github.com/oaievals-collector/compare/0.0.2-beta1...0.0.3-beta1
+[0.0.2-beta1]: https://github.com/oaievals-collector/compare/0.0.1-beta1...0.0.2-beta1
+[0.0.1-beta1]: https://github.com/oaievals-collector/releases/tag/0.0.1-beta1
