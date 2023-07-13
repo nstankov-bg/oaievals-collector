@@ -25,6 +25,13 @@ var bootstrapServers = strings.Split(os.Getenv("KAFKA_BOOTSTRAP_SERVERS"), ",")
 var messageBuffer []kafka.Message // Buffer to hold messages
 
 func init() {
+	bootstrapServersEnv := os.Getenv("KAFKA_BOOTSTRAP_SERVERS")
+	if bootstrapServersEnv == "" {
+		log.Printf("No Kafka bootstrap servers provided, skipping Kafka client initialization")
+		return
+	}
+	bootstrapServers = strings.Split(bootstrapServersEnv, ",")
+
 	// Initialize the writer as a *kafka.Writer, which satisfies the KafkaWriter interface
 	writer = &kafka.Writer{
 		Addr:         kafka.TCP(bootstrapServers...),
@@ -83,6 +90,12 @@ func flushMessageBuffer() {
 
 // WriteToKafka writes the event to Kafka
 func WriteToKafka(event events.Event) error {
+
+	if writer == nil {
+		log.Printf("Kafka client is not initialized, skipping write")
+		return nil
+	}
+
 	// Ensure the topic "evals" exists
 	err := ensureTopicExists("evals")
 	if err != nil {
@@ -122,6 +135,10 @@ func WriteToKafka(event events.Event) error {
 }
 
 func Shutdown() {
+	if writer == nil {
+		log.Printf("Kafka client is not initialized, skipping shutdown")
+		return
+	}
 	// Flush any remaining messages in the buffer before shutting down
 	flushMessageBuffer()
 

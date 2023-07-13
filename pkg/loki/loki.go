@@ -44,7 +44,8 @@ var lokiClient Client
 func init() {
 	lokiURL := os.Getenv("LOKI_URL")
 	if lokiURL == "" {
-		log.Fatalf("No Loki URL provided")
+		log.Printf("No Loki URL provided, skipping Loki client initialization")
+		return
 	}
 
 	_, err := url.Parse(lokiURL)
@@ -73,13 +74,19 @@ func init() {
 	}
 
 	if realClient == nil {
-		log.Fatalf("Client is nil")
+		log.Printf("Client is nil, skipping Loki client initialization")
+		return
 	}
 
 	lokiClient = &RealClient{client: realClient}
 }
 
 func WriteToLoki(event events.Event) {
+	if lokiClient == nil {
+		log.Printf("Loki client is not initialized, skipping write")
+		return
+	}
+
 	labels := model.LabelSet{
 		"job":       model.LabelValue("MYJOB"),
 		"run_id":    model.LabelValue(fmt.Sprint(event.RunID)),

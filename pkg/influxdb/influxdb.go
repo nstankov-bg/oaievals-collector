@@ -45,12 +45,18 @@ var client Client
 func init() {
 	token := os.Getenv("INFLUXDB_TOKEN")
 	if token == "" {
-		log.Fatalf("No InfluxDB token provided")
+		log.Printf("No InfluxDB token provided, skipping InfluxDB client initialization")
+		return
 	}
 	client = &RealClient{client: influxdb2.NewClient(os.Getenv("INFLUXDB_HOST"), token)}
 }
 
 func WriteToInfluxDB(event events.Event) {
+	if client == nil {
+		log.Printf("InfluxDB client is not initialized, skipping write")
+		return
+	}
+
 	// get non-blocking write client
 	writeAPI := client.WriteAPI(os.Getenv("INFLUXDB_ORG"), os.Getenv("INFLUXDB_BUCKET"))
 
