@@ -19,6 +19,10 @@ var (
 )
 
 func init() {
+	if os.Getenv("TIMESCALEDB_HOST") == "" {
+		log.Printf("No TimescaleDB host provided, skipping TimescaleDB client initialization")
+		return
+	}
 	Initialize()
 }
 
@@ -64,6 +68,11 @@ func createEventsTable() {
 }
 
 func WriteToTimescaleDB(event events.Event) error {
+	if pool == nil {
+		log.Printf("TimescaleDB client is not initialized, skipping write")
+		return nil
+	}
+
 	sql, args := prepareInsertStatement(event)
 
 	log.Printf("Executing SQL: %s with args: %v\n", sql, args)

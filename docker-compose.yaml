@@ -41,13 +41,13 @@ services:
       - loki
       - timescaledb
     environment:
-      INFLUXDB_HOST: http://db:8086
-      INFLUXDB_USER: my-user
-      INFLUXDB_TOKEN: WlzWM122bT1CvsLTNsgivIIKWaEBo6F1w2tLzmfaQSEDQ6XQkFhBeSwJCeHBxYGKonhRKCIL8ird9T7CfkSoJw==
-      INFLUXDB_ORG: my-org
-      INFLUXDB_BUCKET: my-bucket
-      TIMESCALEDB_HOST: postgres://postgres:my-password@timescaledb:5432/mydatabase
-      LOKI_URL: http://loki:3100/loki/api/v1/push
+      # INFLUXDB_HOST: http://db:8086
+      # INFLUXDB_USER: my-user
+      # INFLUXDB_TOKEN: WlzWM122bT1CvsLTNsgivIIKWaEBo6F1w2tLzmfaQSEDQ6XQkFhBeSwJCeHBxYGKonhRKCIL8ird9T7CfkSoJw==
+      # INFLUXDB_ORG: my-org
+      # INFLUXDB_BUCKET: my-bucket
+      # TIMESCALEDB_HOST: postgres://postgres:my-password@timescaledb:5432/mydatabase
+      # LOKI_URL: http://loki:3100/loki/api/v1/push
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - "8081:8080"
