@@ -8,7 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- MongoDB support: The OAIEvals Collector now includes MongoDB as a target for collecting and storing event data. With the new addition, the collector can connect, interact, and write event data to MongoDB databases. The MongoDB support allows for flexible, document-based data modeling and can handle a wide variety of data types. Required environment variables: `MONGODB_URI`, `MONGODB_DATABASE`, `MONGODB_COLLECTION`.
+- [BETA]MongoDB support: The OAIEvals Collector now includes MongoDB as a target for collecting and storing event data. With the new addition, the collector can connect, interact, and write event data to MongoDB databases. The MongoDB support allows for flexible, document-based data modeling and can handle a wide variety of data types. Required environment variables: `MONGODB_URI`, `MONGODB_DATABASE`, `MONGODB_COLLECTION`.
+
+- **Kafka Improvements**:
+    - **Environment Variable Validation**: The application now checks if the `KAFKA_BOOTSTRAP_SERVERS` environment variable exists and is valid. If not, the application will exit or alert the user that it can't proceed without this value.
+    - **Buffer Size Configuration**: The size of the message buffer used for batching Kafka messages is now configurable, allowing for optimization based on the specific use case and system resources.
+    - **Periodic Flushing of Message Buffer**: A background goroutine is introduced to periodically flush the message buffer to Kafka, ensuring that messages do not remain in the buffer for an excessively long time. The interval at which the buffer is flushed is configurable.
+    - **Exponential Backoff**: Implemented exponential backoff when attempting to write messages to Kafka. This helps to handle temporary Kafka unavailability or high load scenarios by retrying failed attempts with increasing delays.
+    - **Mutex for Message Buffer**: A mutex is added to protect the message buffer from concurrent access, ensuring thread-safety when appending messages to the buffer.
+
+### Changed
+- **Kafka Improvements**:
+    - **Batch Message Writing**: The application now uses the WriteMessages function of the Kafka writer to write messages in batches, improving throughput and reducing the overhead of individual message writes.
+    - **Shutdown Procedure**: The shutdown procedure now ensures that any remaining messages in the buffer are flushed to Kafka before closing the Kafka writer. It also properly stops the background flushing goroutine.
+
+### Fixed
+- **Kafka Writer Initialization**: Fixed an issue where the Kafka writer was not properly initialized when the `KAFKA_BOOTSTRAP_SERVERS` environment variable was not set.
 
 ## [0.0.4-beta1] - 2023-07-13
 
