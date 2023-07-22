@@ -24,6 +24,13 @@ The latest addition to the list of integrations is Elasticsearch 8. Elasticsearc
 
 ## Demo:
 
+**Elasticsearch x Kibana:**
+
+| Elasticsearch Test |
+| :---: |
+| *Basic Visualization via Kibana*
+| ![Screenshot 2023-07-22 at 10 33 28 AM](https://github.com/openai/evals/assets/27363885/e03a4cf7-49f4-4207-a1b7-58a5ccef9b1c)
+
 **InfluxDB:**
 
 | InfluxDB Test 1 | InfluxDB Test 2 |
