@@ -71,8 +71,9 @@ func WriteToElasticsearch(event events.Event) error {
 		return err
 	}
 
+	indexName := fmt.Sprintf("evals_%s", event.RunID) // Create a new index for each run
 	req := esapi.IndexRequest{
-		Index:      "evals",             // Using "evals" as index
+		Index:      indexName,
 		DocumentID: uuid.New().String(), // Use a UUID as the document ID
 		Body:       bytes.NewReader(jsonData),
 	}
