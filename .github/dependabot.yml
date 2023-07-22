@@ -1,0 +1,30 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "gomod" # For Go modules
+    directory: "/" # Root directory where your go.mod and go.sum files are located
+    schedule:
+      interval: "daily" # Check for updates daily
+    commit-message:
+      prefix: "chore" # Commonly used prefixes include 'chore', 'fix', 'feat'
+      include: "scope" # 'scope' because it provides context for the changes
+    reviewers: # Optional: Specify reviewers for created PRs
+      - "nstankov-bg"
+    assignees: # Optional: Specify assignees for created PRs
+      - "nstankov-bg"
+  - package-ecosystem: "docker" # For Docker
+    directory: "/" # Root directory where your Dockerfile is located
+    schedule:
+      interval: "daily" # Check for updates daily
+    commit-message:
+      prefix: "chore" # Commonly used prefixes include 'chore', 'fix', 'feat'
+      include: "scope" # 'scope' because it provides context for the changes
+    reviewers: # Optional: Specify reviewers for created PRs
+      - "nstankov-bg"
+    assignees: # Optional: Specify assignees for created PRs
+      - "nstankov-bg"
+
