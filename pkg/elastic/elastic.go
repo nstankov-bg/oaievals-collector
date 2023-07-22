@@ -13,6 +13,7 @@ import (
 	"github.com/cenkalti/backoff/v4"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/google/uuid"
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
 )
 
@@ -71,8 +72,8 @@ func WriteToElasticsearch(event events.Event) error {
 	}
 
 	req := esapi.IndexRequest{
-		Index:      "evals", // Using "evals" as index
-		DocumentID: event.RunID,
+		Index:      "evals",             // Using "evals" as index
+		DocumentID: uuid.New().String(), // Use a UUID as the document ID
 		Body:       bytes.NewReader(jsonData),
 	}
 
