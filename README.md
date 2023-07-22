@@ -8,7 +8,8 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/nstankov-bg/oaievals-collector/build-n-push.yml?branch=main)](https://github.com/nstankov-bg/oaievals-collector/actions?query=workflow%3Abuild+branch%3Amain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nstankov-bg/oaievals-collector)](https://goreportcard.com/report/github.com/nstankov-bg/oaievals-collector)
 [![Codecov](https://codecov.io/gh/nstankov-bg/oaievals-collector/branch/main/graph/badge.svg)](https://codecov.io/gh/nstankov-bg/oaievals-collector)
-[![Known Vulnerabilities](https://snyk.io/test/github/nstankov-bg/oaievals-collector/badge.svg)](https://snyk.io/test/github/nstankov-bg/oaievals-collector)
+[![Known Vulnerabilities](https://snyk.io/test/github/nstankov-bg/oaievals-collector/main/badge.svg)](https://snyk.io/test/github/nstankov-bg/main/oaievals-collector)
+
 ⭐ `Star` this repository if you find it valuable and worth maintaining.
 
 👁 `Watch` this repository to get notified about new releases, issues, etc.
