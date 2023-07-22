@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  timescaledb:
+    image: timescale/timescaledb-ha:pg14-latest
+    environment:
+      POSTGRES_PASSWORD: my-password
+      POSTGRES_DB: mydatabase
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  
+  oaievals-collector:
+    platform: linux/arm64
+    build: .
+    restart: always
+    volumes:
+      - ./data:/data
+    depends_on:
+      - timescaledb
+    environment:
+      TIMESCALEDB_HOST: postgres://postgres:my-password@timescaledb:5432/mydatabase
+    ports:
+      - "8081:8080"
+
+volumes:
+  timescaledb_data:

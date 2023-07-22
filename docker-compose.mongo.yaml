@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MONGODB_DATABASE=${MONGODB_DATABASE:-mydatabase}
+      - MONGODB_USERNAME=${MONGODB_USERNAME:-user}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD:-password}
+    ports:
+      - '27017:27017'
+  
+  oaievals-collector:
+    platform: linux/arm64
+    build: .
+    restart: always
+    volumes:
+      - ./data:/data
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_URI: ${MONGODB_URI:-mongodb:27017}
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-mydatabase}
+      MONGODB_USERNAME: ${MONGODB_USERNAME:-user}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD:-password}
+      MONGODB_COLLECTION: ${MONGODB_COLLECTION:-mycollection}
+    ports:
+      - "8081:8080"

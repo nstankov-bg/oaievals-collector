@@ -26,3 +26,6 @@ cmd/oaevals-collector/processed/
 
 # ignore all markdown files
 *.md
+
+# ignore all docker compose files
+docker-compose.*.yml

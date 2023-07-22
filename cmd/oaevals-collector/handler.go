@@ -18,7 +18,6 @@ import (
 var mon = monitoring.NewMonitoring()
 
 func eventHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("Received a request on /events")
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -97,5 +96,4 @@ func eventHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("Events received"))
-	log.Println("Events processed successfully")
 }

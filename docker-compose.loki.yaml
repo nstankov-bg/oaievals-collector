@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+  
+  oaievals-collector:
+    platform: linux/arm64
+    build: .
+    restart: always
+    volumes:
+      - ./data:/data
+    depends_on:
+      - loki
+    environment:
+      LOKI_URL: http://loki:3100/loki/api/v1/push
+    ports:
+      - "8081:8080"
