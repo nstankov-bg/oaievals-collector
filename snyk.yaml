@@ -1,0 +1,29 @@
+version: v1.19.0
+apiVersion: v1alpha1
+
+# Docker and OCI images are scanned in a Dockerfile context.
+# Other projects are scanned in the filesystem context.
+context:
+  # The base directory inside the Dockerfile context.
+  baseDir: /
+
+integrations:
+  - name: docker
+    settings:
+      # The path to the Dockerfile.
+      dockerfilePath: ./Dockerfile
+
+  - name: go
+    settings:
+      # The path to the go.mod file.
+      goModPath: ./go.mod
+      # The path to the go.sum file.
+      goSumPath: ./go.sum
+
+# Scan settings that are applicable to all integrations.
+scan:
+  # Fail the scan if vulnerabilities are found.
+  failOnIssues: true
+  # Show a summary of the scan results.
+  report:
+    format: summary
