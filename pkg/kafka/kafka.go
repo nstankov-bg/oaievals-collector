@@ -6,9 +6,11 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/Shopify/sarama"
+	"github.com/cenkalti/backoff/v4"
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
 	"github.com/segmentio/kafka-go"
 )
@@ -23,6 +25,14 @@ type KafkaWriter interface {
 var writer KafkaWriter
 var bootstrapServers = strings.Split(os.Getenv("KAFKA_BOOTSTRAP_SERVERS"), ",")
 var messageBuffer []kafka.Message // Buffer to hold messages
+var bufferMutex sync.Mutex        // Mutex to protect the message buffer
+var stopChan chan struct{}        // Channel to signal flushing goroutine to stop
+var wg sync.WaitGroup             // WaitGroup to wait for flushing goroutine to stop
+
+// Configurable parameters with default values
+var batchSize = 10
+var batchTimeout = 10 * time.Second
+var flushInterval = 1 * time.Second
 
 func init() {
 	bootstrapServersEnv := os.Getenv("KAFKA_BOOTSTRAP_SERVERS")
@@ -36,15 +46,19 @@ func init() {
 	writer = &kafka.Writer{
 		Addr:         kafka.TCP(bootstrapServers...),
 		Async:        true, // Enable async to allow batching
-		BatchSize:    10,   // Increase batch size
-		BatchTimeout: 10 * time.Second,
+		BatchSize:    batchSize,
+		BatchTimeout: batchTimeout,
 		Transport:    &kafka.Transport{TLS: nil}, // Update this to your needs
 		Logger:       log.New(os.Stdout, "kafka writer: ", 0),
 		ErrorLogger:  log.New(os.Stderr, "kafka writer: ", 0),
 	}
 
 	// Initialize the message buffer
-	messageBuffer = make([]kafka.Message, 0, 10)
+	messageBuffer = make([]kafka.Message, 0, batchSize)
+
+	// Start the flushing goroutine
+	stopChan = make(chan struct{})
+	go flushMessageBufferPeriodically()
 }
 
 func ensureTopicExists(topic string) error {
@@ -77,14 +91,47 @@ func ensureTopicExists(topic string) error {
 }
 
 func flushMessageBuffer() {
-	// Only attempt to write messages if there are messages in the buffer
-	if len(messageBuffer) > 0 {
-		err := writer.WriteMessages(context.Background(), messageBuffer...)
-		if err != nil {
-			log.Printf("Failed to write messages to kafka: %s\n", err)
+	bufferMutex.Lock()
+	if len(messageBuffer) == 0 {
+		bufferMutex.Unlock()
+		return
+	}
+
+	// Copy the message buffer and clear the original buffer
+	tmpBuffer := make([]kafka.Message, len(messageBuffer))
+	copy(tmpBuffer, messageBuffer)
+	messageBuffer = messageBuffer[:0]
+	bufferMutex.Unlock()
+
+	operation := func() error {
+		return writer.WriteMessages(context.Background(), tmpBuffer...)
+	}
+
+	// Use exponential backoff strategy
+	backoffConfig := backoff.NewExponentialBackOff()
+	backoffConfig.MaxElapsedTime = 2 * time.Minute // example max elapsed time
+
+	err := backoff.Retry(operation, backoffConfig)
+	if err != nil {
+		log.Printf("Failed to write messages to kafka after several retries: %s\n", err)
+		// Consider whether you want to add the messages back to the buffer in case of failure
+	}
+}
+
+func flushMessageBufferPeriodically() {
+	wg.Add(1)
+	defer wg.Done()
+
+	ticker := time.NewTicker(flushInterval)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			flushMessageBuffer()
+		case <-stopChan:
+			return
 		}
-		// Clear the message buffer
-		messageBuffer = messageBuffer[:0]
 	}
 }
 
@@ -124,10 +171,13 @@ func WriteToKafka(event events.Event) error {
 		Value: jsonData,
 		Topic: "evals", // Using "evals" as topic
 	}
+
+	bufferMutex.Lock()
 	messageBuffer = append(messageBuffer, msg)
+	bufferMutex.Unlock()
 
 	// If the buffer is full, flush it
-	if len(messageBuffer) >= 10 {
+	if len(messageBuffer) >= batchSize {
 		flushMessageBuffer()
 	}
 
@@ -139,6 +189,10 @@ func Shutdown() {
 		log.Printf("Kafka client is not initialized, skipping shutdown")
 		return
 	}
+	// Stop the flushing goroutine and wait for it to finish
+	close(stopChan)
+	wg.Wait()
+
 	// Flush any remaining messages in the buffer before shutting down
 	flushMessageBuffer()
 

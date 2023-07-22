@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/Shopify/sarama v1.38.1
+	github.com/cenkalti/backoff/v4 v4.2.1
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-kit/log v0.2.1
 	github.com/grafana/dskit v0.0.0-20230518162305-3c92c534827e
@@ -14,6 +15,7 @@ require (
 	github.com/prometheus/common v0.43.0
 	github.com/segmentio/kafka-go v0.4.42
 	github.com/stretchr/testify v1.8.4
+	go.mongodb.org/mongo-driver v1.12.0
 )
 
 require (
@@ -133,7 +135,6 @@ require (
 	go.etcd.io/etcd/api/v3 v3.5.7 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.7 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.7 // indirect
-	go.mongodb.org/mongo-driver v1.12.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.40.0 // indirect
 	go.opentelemetry.io/otel v1.14.0 // indirect
 	go.opentelemetry.io/otel/metric v0.37.0 // indirect
