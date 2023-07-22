@@ -84,11 +84,19 @@ The OAIEvals Collector relies on [InfluxDB](https://www.influxdata.com/), [Loki]
 
 ## Build, Run, Test
 
-### With Docker Compose
+### Running with Docker Compose
 
-A Docker Compose file is provided for convenience, which will start up the application along with instances of InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB:
+You can easily run the application along with the desired data storage service (InfluxDB, Loki, TimescaleDB, Kafka, or MongoDB) using Docker Compose. For each data storage service, a dedicated Docker Compose file and corresponding Make commands are provided.
 
-1. Build and start the services: `docker-compose up --build`
+To start the application with a specific service, view the logs, or stop the service, use the appropriate Make command. Here's how you do it for each service:
+
+- **TimescaleDB**: `make up-timescale`, `make logs-timescale`, `make down-timescale`
+- **MongoDB**: `make up-mongo`, `make logs-mongo`, `make down-mongo`
+- **InfluxDB**: `make up-influx`, `make logs-influx`, `make down-influx`
+- **Loki**: `make up-loki`, `make logs-loki`, `make down-loki`
+- **Kafka**: `make up-kafka`, `make logs-kafka`, `make down-kafka`
+
+For example, `make up-timescale` starts the application with TimescaleDB, `make logs-timescale` displays its logs, and `make down-timescale` stops the service.
 
 ### Locally
 
