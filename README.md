@@ -75,13 +75,9 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 1. Once you've obtained the tokens and connection strings, stop the running Docker Compose services (using CTRL+C or `docker-compose down` command).
 2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_URL=your_loki_url`,`KAFKA_BOOTSTRAP_SERVERS=your_kafka_bootstrap_servers`, `TIMESCALEDB_HOST=your_timescaledb_host`, `MONGODB_URI=your_mongodb_uri, `ES_ADDRESS=your_elastic_address` and others with the tokens or endpoints obtained from InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB respectively.
 
-**Restart Services:**
-
-1. Re-run `docker-compose up`. Now, the OAIEvals Collector should be able to connect to the InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB with the provided tokens or connection strings.
-
 ## Dependencies
 
-The OAIEvals Collector relies on [InfluxDB](https://www.influxdata.com/), [Loki](https://grafana.com/oss/loki/), [TimescaleDB](https://www.timescale.com/), [Kafka](https://kafka.apache.org/), and [MongoDB](https://www.mongodb.com/) for storing collected metrics. Ensure you have instances of these systems available for the application to connect to.
+The OAIEvals Collector is compatible with various storage systems for metrics collection, and it allows the user to select one or more collection points according to their needs. The supported storage systems include [InfluxDB](https://www.influxdata.com/), [Loki](https://grafana.com/oss/loki/), [TimescaleDB](https://www.timescale.com/), [Kafka](https://kafka.apache.org/), [MongoDB](https://www.mongodb.com/), and now, [Elasticsearch 8](https://www.elastic.co/). Ensure you have instances of these systems available for the application to connect to if you choose to use them.
 
 ## Build, Run, Test
 
