@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5-beta1] - 2023-07-21
+
 ### Added
 - [BETA]MongoDB support: The OAIEvals Collector now includes MongoDB as a target for collecting and storing event data. With the new addition, the collector can connect, interact, and write event data to MongoDB databases. The MongoDB support allows for flexible, document-based data modeling and can handle a wide variety of data types. Required environment variables: `MONGODB_URI`, `MONGODB_DATABASE`, `MONGODB_COLLECTION`.
 
