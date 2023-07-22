@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  kafka:
+    platform: linux/arm64
+    image: 'bitnami/kafka:latest'
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports:
+      - '9092:9092'
+  
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8082:8080
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
+
+  oaievals-collector:
+    platform: linux/arm64
+    build: .
+    restart: always
+    volumes:
+      - ./data:/data
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    ports:
+      - "8081:8080"

@@ -110,7 +110,6 @@ func processFile(fileInfo os.FileInfo) {
 }
 
 func processEvent(event events.Event) {
-	log.Printf("Processing event of type: %s", event.Type)
 	if event.Type == "match" {
 		if correctVal, exists := event.Data["correct"]; exists {
 			if correct, ok := correctVal.(bool); ok {
