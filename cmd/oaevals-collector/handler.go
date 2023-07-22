@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/nstankov-bg/oaievals-collector/pkg/elastic"
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
 	"github.com/nstankov-bg/oaievals-collector/pkg/influxdb"
 	"github.com/nstankov-bg/oaievals-collector/pkg/kafka"
@@ -89,6 +90,16 @@ func eventHandler(w http.ResponseWriter, r *http.Request) {
 				err := mongodb.WriteToMongoDB(event)
 				if err != nil {
 					log.Printf("Failed to write event to MongoDB: %v", err)
+				}
+			}
+
+			// Check if the environmental variable for Elasticsearch is set.
+			esAddress := os.Getenv("ES_ADDRESS")
+			if esAddress != "" {
+				// If set, write to Elasticsearch.
+				err := elastic.WriteToElasticsearch(event)
+				if err != nil {
+					log.Printf("Failed to write event to Elasticsearch: %v", err)
 				}
 			}
 		}

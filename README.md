@@ -64,16 +64,16 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 
 **Start Services:**
 
-1. Run `docker-compose up` to start the OAIEvals Collector, InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB. Docker will pull the images (if not already present) and build the OAIEvals Collector image.
+1. Run `docker-compose up` to start the OAIEvals Collector, Kafka,Elasticsearch, InfluxDB, Loki, TimescaleDB, MongoDB. Docker will pull the images (if not already present) and build the OAIEvals Collector image.
 
 **InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB Setup:**
 
-1. While the services are spinning up, navigate to your InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB instances and generate an authentication token (for InfluxDB) and/or get the connection strings. These tokens and strings will be used by the OAIEvals Collector to connect and interact with the databases.
+1. While the services are spinning up, navigate to your InfluxDB instance and generate an authentication token (for InfluxDB) and/or get the connection strings. These tokens and strings will be used by the OAIEvals Collector to connect and interact with the databases.
 
 **Configuration Setup:**
 
 1. Once you've obtained the tokens and connection strings, stop the running Docker Compose services (using CTRL+C or `docker-compose down` command).
-2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_URL=your_loki_url`,`KAFKA_BOOTSTRAP_SERVERS=your_kafka_bootstrap_servers`, `TIMESCALEDB_HOST=your_timescaledb_host`, `MONGODB_URI=your_mongodb_uri` and others with the tokens or endpoints obtained from InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB respectively.
+2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_URL=your_loki_url`,`KAFKA_BOOTSTRAP_SERVERS=your_kafka_bootstrap_servers`, `TIMESCALEDB_HOST=your_timescaledb_host`, `MONGODB_URI=your_mongodb_uri, `ES_ADDRESS=your_elastic_address` and others with the tokens or endpoints obtained from InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB respectively.
 
 **Restart Services:**
 
@@ -96,6 +96,7 @@ To start the application with a specific service, view the logs, or stop the ser
 - **InfluxDB**: `make up-influx`, `make logs-influx`, `make down-influx`
 - **Loki**: `make up-loki`, `make logs-loki`, `make down-loki`
 - **Kafka**: `make up-kafka`, `make logs-kafka`, `make down-kafka`
+- **Elastic**: `make up-elastic`, `make logs-elastic`, `make down-elastic`
 
 For example, `make up-timescale` starts the application with TimescaleDB, `make logs-timescale` displays its logs, and `make down-timescale` stops the service.
 

@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    platform: linux/arm64
+    image: 'bitnami/elasticsearch:latest'
+    ports:
+      - '9200:9200'
+    networks:
+      - collector_network
+    restart: unless-stopped
+    volumes:
+      - elasticsearch_data:/bitnami/elasticsearch/data
+
+  oaievals-collector:
+    platform: linux/arm64
+    build: 
+      context: ../
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - data_volume:/data
+    depends_on:
+      - elasticsearch
+    environment:
+      ES_ADDRESS: http://elasticsearch:9200
+    ports:
+      - "8081:8080"
+    networks:
+      - collector_network
+
+volumes:
+  elasticsearch_data:
+    driver: local
+  data_volume:
+    driver: local
+
+networks:
+  collector_network:
+    driver: bridge

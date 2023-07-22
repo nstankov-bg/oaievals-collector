@@ -104,6 +104,16 @@ down-kafka: ## docker-compose down for kafka
 	$(call print-target)
 	docker compose -f docker/docker-compose.kafka.yaml down
 
+.PHONY: up-elastic
+up-elastic: ## docker-compose up for elastic
+	$(call print-target)
+	docker-compose -f docker/docker-compose.elastic.yaml up --build -d
+
+.PHONY: down-elastic
+down-elastic: ## docker-compose down for elastic
+	$(call print-target)
+	docker-compose -f docker/docker-compose.elastic.yaml down
+
 .PHONY: logs-mongo
 logs-mongo: ## docker-compose logs for mongo
 	$(call print-target)
@@ -128,3 +138,8 @@ logs-loki: ## docker-compose logs for loki
 logs-kafka: ## docker-compose logs for kafka
 	$(call print-target)
 	docker compose -f docker/docker-compose.kafka.yaml logs -f
+
+.PHONY: logs-elastic
+logs-elastic: ## docker-compose logs for elastic
+	$(call print-target)
+	docker-compose -f docker/docker-compose.elastic.yaml logs -f
