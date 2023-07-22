@@ -8,6 +8,11 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     ports:
       - '9092:9092'
+    networks:
+      - collector_network
+    restart: unless-stopped
+    volumes:
+      - kafka_data:/bitnami/kafka/data
   
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -15,16 +20,33 @@ services:
       - 8082:8080
     environment:
       DYNAMIC_CONFIG_ENABLED: true
+    networks:
+      - collector_network
+    restart: unless-stopped
 
   oaievals-collector:
     platform: linux/arm64
-    build: .
+    build: 
+      context: ../
+      dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./data:/data
+      - data_volume:/data
     depends_on:
       - kafka
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - "8081:8080"
+    networks:
+      - collector_network
+
+volumes:
+  kafka_data:
+    driver: local
+  data_volume:
+    driver: local
+
+networks:
+  collector_network:
+    driver: bridge

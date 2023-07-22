@@ -10,13 +10,20 @@ services:
       - MONGODB_PASSWORD=${MONGODB_PASSWORD:-password}
     ports:
       - '27017:27017'
+    networks:
+      - collector_network
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/bitnami/mongodb
   
   oaievals-collector:
     platform: linux/arm64
-    build: .
+    build: 
+      context: ../
+      dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./data:/data
+      - data_volume:/data
     depends_on:
       - mongodb
     environment:
@@ -27,3 +34,15 @@ services:
       MONGODB_COLLECTION: ${MONGODB_COLLECTION:-mycollection}
     ports:
       - "8081:8080"
+    networks:
+      - collector_network
+
+volumes:
+  mongodb_data:
+    driver: local
+  data_volume:
+    driver: local
+
+networks:
+  collector_network:
+    driver: bridge

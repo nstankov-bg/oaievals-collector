@@ -57,74 +57,74 @@ endef
 .PHONY: up-mongo
 up-mongo: ## docker-compose up for mongo
 	$(call print-target)
-	docker compose -f docker-compose.mongo.yaml up  --build -d
+	docker compose -f docker/docker-compose.mongo.yaml up  --build -d
 
 .PHONY: down-mongo
 down-mongo: ## docker-compose down for mongo
 	$(call print-target)
-	docker compose -f docker-compose.mongo.yaml down
+	docker compose -f docker/docker-compose.mongo.yaml down
 
 .PHONY: up-influx
 up-influx: ## docker-compose up for influx
 	$(call print-target)
-	docker compose -f docker-compose.influx.yaml up  --build -d
+	docker compose -f docker/docker-compose.influx.yaml up  --build -d
 
 .PHONY: down-influx
 down-influx: ## docker-compose down for influx
 	$(call print-target)
-	docker compose -f docker-compose.influx.yaml down
+	docker compose -f docker/docker-compose.influx.yaml down
 
 .PHONY: up-timescale
 up-timescale: ## docker-compose up for timescale
 	$(call print-target)
-	docker compose -f docker-compose.timescale.yaml up  --build -d
+	docker compose -f docker/docker-compose.timescale.yaml up  --build -d
 
 .PHONY: down-timescale
 down-timescale: ## docker-compose down for timescale
 	$(call print-target)
-	docker compose -f docker-compose.timescale.yaml down
+	docker compose -f docker/docker-compose.timescale.yaml down
 
 .PHONY: up-loki
 up-loki: ## docker-compose up for loki
 	$(call print-target)
-	docker compose -f docker-compose.loki.yaml up  --build -d
+	docker compose -f docker/docker-compose.loki.yaml up  --build -d
 
 .PHONY: down-loki
 down-loki: ## docker-compose down for loki
 	$(call print-target)
-	docker compose -f docker-compose.loki.yaml down
+	docker compose -f docker/docker-compose.loki.yaml down
 
 .PHONY: up-kafka
 up-kafka: ## docker-compose up for kafka
 	$(call print-target)
-	docker compose -f docker-compose.kafka.yaml up  --build -d
+	docker compose -f docker/docker-compose.kafka.yaml up  --build -d
 
 .PHONY: down-kafka
 down-kafka: ## docker-compose down for kafka
 	$(call print-target)
-	docker compose -f docker-compose.kafka.yaml down
+	docker compose -f docker/docker-compose.kafka.yaml down
 
 .PHONY: logs-mongo
 logs-mongo: ## docker-compose logs for mongo
 	$(call print-target)
-	docker compose -f docker-compose.mongo.yaml logs -f
+	docker compose -f docker/docker-compose.mongo.yaml logs -f
 
 .PHONY: logs-influx
 logs-influx: ## docker-compose logs for influx
 	$(call print-target)
-	docker compose -f docker-compose.influx.yaml logs -f
+	docker compose -f docker/docker-compose.influx.yaml logs -f
 
 .PHONY: logs-timescale
 logs-timescale: ## docker-compose logs for timescale
 	$(call print-target)
-	docker compose -f docker-compose.timescale.yaml logs -f
+	docker compose -f docker/docker-compose.timescale.yaml logs -f
 
 .PHONY: logs-loki
 logs-loki: ## docker-compose logs for loki
 	$(call print-target)
-	docker compose -f docker-compose.loki.yaml logs -f
+	docker compose -f docker/docker-compose.loki.yaml logs -f
 
 .PHONY: logs-kafka
 logs-kafka: ## docker-compose logs for kafka
 	$(call print-target)
-	docker compose -f docker-compose.kafka.yaml logs -f
+	docker compose -f docker/docker-compose.kafka.yaml logs -f

@@ -5,16 +5,31 @@ services:
     image: grafana/loki:latest
     ports:
       - "3100:3100"
+    networks:
+      - collector_network
+    restart: unless-stopped
   
   oaievals-collector:
     platform: linux/arm64
-    build: .
+    build: 
+      context: ../
+      dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./data:/data
+      - data_volume:/data
     depends_on:
       - loki
     environment:
       LOKI_URL: http://loki:3100/loki/api/v1/push
     ports:
       - "8081:8080"
+    networks:
+      - collector_network
+
+volumes:
+  data_volume:
+    driver: local
+
+networks:
+  collector_network:
+    driver: bridge

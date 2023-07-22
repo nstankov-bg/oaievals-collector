@@ -15,7 +15,9 @@ services:
   
   oaievals-collector:
     platform: linux/arm64
-    build: .
+    build: 
+      context: ../
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - ./data:/data

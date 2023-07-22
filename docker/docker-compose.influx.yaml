@@ -14,13 +14,18 @@ services:
       - influxdb_data:/var/lib/influxdb2
     ports:
       - "8086:8086"
+    networks:
+      - collector_network
+    restart: unless-stopped
   
   oaievals-collector:
     platform: linux/arm64
-    build: .
+    build: 
+      context: ../
+      dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./data:/data
+      - data_volume:/data
     depends_on:
       - db
     environment:
@@ -31,6 +36,15 @@ services:
       INFLUXDB_BUCKET: my-bucket
     ports:
       - "8081:8080"
+    networks:
+      - collector_network
 
 volumes:
   influxdb_data:
+    driver: local
+  data_volume:
+    driver: local
+
+networks:
+  collector_network:
+    driver: bridge
