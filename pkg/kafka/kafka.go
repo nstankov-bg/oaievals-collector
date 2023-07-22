@@ -104,7 +104,15 @@ func flushMessageBuffer() {
 	bufferMutex.Unlock()
 
 	operation := func() error {
-		return writer.WriteMessages(context.Background(), tmpBuffer...)
+		err := writer.WriteMessages(context.Background(), tmpBuffer...)
+		if err == nil {
+			// Increment Prometheus counter
+			MessagesSent.Add(float64(len(tmpBuffer)))
+		} else {
+			// Increment error counter
+			SendErrors.Inc()
+		}
+		return err
 	}
 
 	// Use exponential backoff strategy
