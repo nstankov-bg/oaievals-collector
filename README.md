@@ -100,21 +100,24 @@ A Docker Compose file is provided for convenience, which will start up the appli
 You can test the OAIEvals Collector by sending a POST request with a payload representing an event. For instance:
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '
-{
-  "run_id": "2307080128125Q6U7IFP",
-  "event_id": 3,
-  "sample_id": "abstract-causal-reasoning-text.dev.484",
-  "type": "match",
-  "data": {
-    "correct": false,
-    "expected": "ANSWER: off",
-    "picked": "undetermined.",
-    "sampled": "undetermined."
-  },
-  "created_by": "",
-  "created_at": "2023-07-08 01:28:13.704853+00:00"
-}' http://localhost:8080/events
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -d '[
+         {
+           "run_id": "2307080128125Q6U7IFP",
+           "event_id": 3,
+           "sample_id": "abstract-causal-reasoning-text.dev.484",
+           "type": "match",
+           "data": {
+             "correct": false,
+             "expected": "ANSWER: off",
+             "picked": "undetermined.",
+             "sampled": "undetermined."
+           },
+           "created_by": "",
+           "created_at": "2023-07-08 01:28:13.704853+00:00"
+         }
+       ]' http://localhost:8081/events
 ```
 
 

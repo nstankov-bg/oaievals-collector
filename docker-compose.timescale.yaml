@@ -10,6 +10,8 @@ services:
       - timescaledb_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - collector_network
   
   oaievals-collector:
     platform: linux/arm64
@@ -23,6 +25,13 @@ services:
       TIMESCALEDB_HOST: postgres://postgres:my-password@timescaledb:5432/mydatabase
     ports:
       - "8081:8080"
+    networks:
+      - collector_network
 
 volumes:
   timescaledb_data:
+    driver: local
+
+networks:
+  collector_network:
+    driver: bridge
