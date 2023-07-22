@@ -28,4 +28,4 @@ cmd/oaevals-collector/processed/
 *.md
 
 # ignore all docker compose files
-docker-compose.*
+docker/docker-compose.*

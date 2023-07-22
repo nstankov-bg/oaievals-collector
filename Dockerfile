@@ -18,21 +18,17 @@ RUN go mod download
 # This is the "cache busting" step.
 COPY . .
 
+ARG CORES=4
+
 # Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux go build -o main ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o main -p ${CORES} ./
 
 # Start a new stage from scratch
 FROM gcr.io/distroless/base-debian11
 
-# Set the Current Working Directory inside the container
-WORKDIR /root/
-
 # Copy the Pre-built binary file from the previous stage
-COPY --from=builder /app/main .
+COPY --from=builder /app/main /root/main
 
-# Command to run the executable
+# Set the working directory and the entrypoint
+WORKDIR /root/
 ENTRYPOINT ["./main"]
-
-# As a best practice, we don't EXPOSE the port in the Dockerfile, as it can lead to 
-# misunderstandings about the function of the EXPOSE directive. The port binding should
-# be specified at runtime using the -p flag.
