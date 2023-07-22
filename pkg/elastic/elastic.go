@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -71,7 +72,25 @@ func WriteToElasticsearch(event events.Event) error {
 		return err
 	}
 
-	indexName := fmt.Sprintf("evals_%s", event.RunID) // Create a new index for each run
+	indexName := fmt.Sprintf("evals_%s", strings.ToLower(event.RunID)) // Create a new index for each run, ensure it's all lowercase
+
+	// Check if the index exists
+	res, err := es.Indices.Exists([]string{indexName})
+	if err != nil {
+		log.Fatalf("Error checking if index exists: %s", err)
+	}
+
+	// If the index doesn't exist, create it
+	if res.StatusCode == 404 {
+		res, err := es.Indices.Create(indexName)
+		if err != nil {
+			log.Fatalf("Error creating index: %s", err)
+		}
+		if res.IsError() {
+			log.Printf("Error creating index: %s", res.String())
+		}
+	}
+
 	req := esapi.IndexRequest{
 		Index:      indexName,
 		DocumentID: uuid.New().String(), // Use a UUID as the document ID
