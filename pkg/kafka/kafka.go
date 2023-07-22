@@ -36,7 +36,7 @@ func init() {
 	writer = &kafka.Writer{
 		Addr:         kafka.TCP(bootstrapServers...),
 		Async:        true, // Enable async to allow batching
-		BatchSize:    10, // Increase batch size
+		BatchSize:    10,   // Increase batch size
 		BatchTimeout: 10 * time.Second,
 		Transport:    &kafka.Transport{TLS: nil}, // Update this to your needs
 		Logger:       log.New(os.Stdout, "kafka writer: ", 0),
@@ -103,8 +103,6 @@ func WriteToKafka(event events.Event) error {
 		return err
 	}
 
-	log.Printf("Received event: %+v\n", event)
-	
 	// Include RunID in the message
 	msgData := struct {
 		events.Event
