@@ -4,12 +4,13 @@ import (
 	"bufio"
 	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/nstankov-bg/oaievals-collector/pkg/events"
-	"github.com/nstankov-bg/oaievals-collector/pkg/influxdb"
 )
 
 var (
@@ -89,6 +90,7 @@ func processFile(fileInfo os.FileInfo) {
 	}
 	defer file.Close()
 
+	var eventsList []events.Event
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		var event events.Event
@@ -96,12 +98,15 @@ func processFile(fileInfo os.FileInfo) {
 			log.Printf("Error unmarshalling event from file %s: %v", filePath, err)
 			continue
 		}
-		processEvent(event)
+		eventsList = append(eventsList, event)
 	}
 
 	if err = scanner.Err(); err != nil {
 		log.Printf("Error reading file %s: %v", filePath, err)
 	}
+
+	// Send events to handler
+	sendEventsToHandler(eventsList)
 
 	newPath := filepath.Join(processedDir, fileInfo.Name())
 	if err = os.Rename(filePath, newPath); err != nil {
@@ -109,22 +114,33 @@ func processFile(fileInfo os.FileInfo) {
 	}
 }
 
-func processEvent(event events.Event) {
-	if event.Type == "match" {
-		if correctVal, exists := event.Data["correct"]; exists {
-			if correct, ok := correctVal.(bool); ok {
-				if correct {
-					mon.EventCounter.WithLabelValues(event.RunID, "true").Inc()
-				} else {
-					mon.EventCounter.WithLabelValues(event.RunID, "false").Inc()
-				}
-			} else {
-				log.Printf("The 'correct' value in event %v is not a boolean", event)
-			}
-		} else {
-			log.Printf("The 'correct' key does not exist in the data of event %v", event)
-		}
+func sendEventsToHandler(eventsList []events.Event) {
+	// Assumes the handler is running on the same host and listening on port 8080
+	url := "http://localhost:8080/events"
 
-		influxdb.WriteToInfluxDB(event)
+	eventsListJson, err := json.Marshal(eventsList)
+	if err != nil {
+		log.Printf("Error marshalling events list: %v", err)
+		return
+	}
+
+	req, err := http.NewRequest("POST", url, strings.NewReader(string(eventsListJson)))
+	if err != nil {
+		log.Printf("Error creating new request: %v", err)
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("Error sending request: %v", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusAccepted {
+		log.Printf("Handler returned non-accepted status: %d", resp.StatusCode)
 	}
 }
