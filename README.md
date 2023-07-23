@@ -6,7 +6,6 @@
 [![go.mod](https://img.shields.io/github/go-mod/go-version/nstankov-bg/oaievals-collector)](go.mod)
 [![LICENSE](https://img.shields.io/github/license/nstankov-bg/oaievals-collector)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nstankov-bg/oaievals-collector)](https://goreportcard.com/report/github.com/nstankov-bg/oaievals-collector)
-## Docker Badges
 
 [![Docker Pulls](https://badgen.net/docker/pulls/nikoogle/oaievals-collector?icon=docker&label=pulls)](https://hub.docker.com/repository/docker/nikoogle/oaievals-collector)
 [![Docker Stars](https://badgen.net/docker/stars/nikoogle/oaievals-collector?icon=docker&label=stars)](https://hub.docker.com/repository/docker/nikoogle/oaievals-collector)
