@@ -8,7 +8,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/nstankov-bg/oaievals-collector/build-n-push.yml?branch=main)](https://github.com/nstankov-bg/oaievals-collector/actions?query=workflow%3Abuild+branch%3Amain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nstankov-bg/oaievals-collector)](https://goreportcard.com/report/github.com/nstankov-bg/oaievals-collector)
 [![Codecov](https://codecov.io/gh/nstankov-bg/oaievals-collector/branch/main/graph/badge.svg)](https://codecov.io/gh/nstankov-bg/oaievals-collector)
-[![Known Vulnerabilities](https://snyk.io/test/github/nstankov-bg/oaievals-collector/main/badge.svg)](https://snyk.io/test/github/nstankov-bg/main/oaievals-collector)
+
 
 ⭐ `Star` this repository if you find it valuable and worth maintaining.
 
@@ -80,7 +80,7 @@ The OAIEvals Collector is designed to be deployed as a containerized application
 **Configuration Setup:**
 
 1. Once you've obtained the tokens and connection strings, stop the running Docker Compose services (using CTRL+C or `docker-compose down` command).
-2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_URL=your_loki_url`,`KAFKA_BOOTSTRAP_SERVERS=your_kafka_bootstrap_servers`, `TIMESCALEDB_HOST=your_timescaledb_host`, `MONGODB_URI=your_mongodb_uri, `ES_ADDRESS=your_elastic_address` and others with the tokens or endpoints obtained from InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB respectively.
+2. Open the `.env` file (create one based on the provided `.env.example` if it does not exist), and replace `your_token_here` in `INFLUXDB_TOKEN=your_token_here`, `LOKI_URL=your_loki_url`,`KAFKA_BOOTSTRAP_SERVERS=your_kafka_bootstrap_servers`, `TIMESCALEDB_HOST=your_timescaledb_host`, `MONGODB_URI=your_mongodb_uri`, `ES_ADDRESS=your_elastic_address` and others with the tokens or endpoints obtained from InfluxDB, Loki, TimescaleDB, Kafka, and MongoDB respectively.
 
 ## Dependencies
 
