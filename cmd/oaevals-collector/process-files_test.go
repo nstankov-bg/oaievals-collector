@@ -1,6 +1,9 @@
 package oaievals_collector
 
 import (
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"testing"
@@ -25,6 +28,23 @@ func TestProcessFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	// Start a local HTTP server
+	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		// Test request parameters
+		assert.Equal(t, req.URL.String(), "/events")
+		body, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+		assert.Equal(t, string(body), "["+testFileContent+"]")
+
+		// Send response to be tested
+		rw.Write([]byte("OK"))
+	}))
+
+	// Close the server when test finishes
+	defer server.Close()
 
 	// Act
 	fileInfo, err := os.Stat(filepath.Join(dataDir, testFileName))
