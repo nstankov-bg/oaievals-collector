@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6-beta1] - 2023-07-23
+
 ### Added
 - **Elasticsearch Support**: The OAIEvals Collector now includes Elasticsearch as a target for collecting and storing event data. With the new addition, the collector can connect, interact, and write event data to Elasticsearch instances.
 
@@ -53,8 +55,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integration with InfluxDB: For robust and efficient data storage, we've integrated the collector with InfluxDB to handle numeric-based time series data.
 - Containerized Deployment: The application supports deployment with Docker and orchestration with Docker Compose, making it easy to use and scalable.
 
-[v0.0.5-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/0.0.4-beta1...0.0.5-beta1
-[0.0.4-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/0.0.3-beta1...0.0.4-beta1
-[0.0.3-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/0.0.2-beta1...0.0.3-beta1
-[0.0.2-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/0.0.1-beta1...0.0.2-beta1
-[0.0.1-beta1]: https://github.com/nstankov-bg/oaievals-collector/releases/tag/0.0.1-beta1
+[v0.0.6-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/v0.0.5-beta1...v0.0.6-beta1
+[v0.0.5-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/v0.0.4-beta1...v0.0.5-beta1
+[v0.0.4-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/v0.0.3-beta1...v0.0.4-beta1
+[v0.0.3-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/v0.0.2-beta1...v0.0.3-beta1
+[v0.0.2-beta1]: https://github.com/nstankov-bg/oaievals-collector/compare/v0.0.1-beta1...v0.0.2-beta1
+[v0.0.1-beta1]: https://github.com/nstankov-bg/oaievals-collector/releases/tag/v0.0.1-beta1
