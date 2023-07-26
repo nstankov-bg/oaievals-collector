@@ -16,6 +16,10 @@
 
 👁 `Watch` this repository to get notified about new releases, issues, etc.
 
+## Stats
+
+![Alt](https://repobeats.axiom.co/api/embed/8a8f307f96fa2ebb08879a294ad1ddc909ad9619.svg "Repobeats analytics image")
+
 ## Introduction
 
 The OAIEvals Collector is a Go application specifically designed to collect and store raw evaluation metrics. It provides an HTTP handler & FileSystem Watcher for receiving metric data, a set of utilities for event handling and monitoring, and supports containerized deployment with Docker for ease of use and scalability.
