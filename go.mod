@@ -17,7 +17,7 @@ require (
 	github.com/prometheus/common v0.44.0
 	github.com/segmentio/kafka-go v0.4.42
 	github.com/stretchr/testify v1.8.4
-	go.mongodb.org/mongo-driver v1.12.0
+	go.mongodb.org/mongo-driver v1.12.1
 )
 
 require (
