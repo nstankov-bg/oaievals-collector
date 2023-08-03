@@ -1,5 +1,5 @@
 # Start from the specific golang base image
-FROM golang:1.21rc3-bullseye AS builder
+FROM golang:1.21rc4-bullseye AS builder
 
 # Add Maintainer Info
 LABEL maintainer="Nikolay Stankov <babati@duck.com>"
