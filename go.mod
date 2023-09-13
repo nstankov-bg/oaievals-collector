@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/Shopify/sarama v1.38.1
 	github.com/cenkalti/backoff/v4 v4.2.1
-	github.com/elastic/go-elasticsearch/v8 v8.9.0
+	github.com/elastic/go-elasticsearch/v8 v8.10.0
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-kit/log v0.2.1
 	github.com/google/uuid v1.3.0
