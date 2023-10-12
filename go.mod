@@ -15,7 +15,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/prometheus/client_golang v1.16.0
 	github.com/prometheus/common v0.44.0
-	github.com/segmentio/kafka-go v0.4.42
+	github.com/segmentio/kafka-go v0.4.44
 	github.com/stretchr/testify v1.8.4
 	go.mongodb.org/mongo-driver v1.12.0
 )
@@ -146,14 +146,14 @@ require (
 	go.uber.org/goleak v1.2.1 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect
-	golang.org/x/crypto v0.11.0 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/exp v0.0.0-20230321023759-10a507213a29 // indirect
 	golang.org/x/mod v0.9.0 // indirect
-	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.8.0 // indirect
 	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
-	golang.org/x/text v0.11.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.7.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
