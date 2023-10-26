@@ -8,7 +8,7 @@ require (
 	github.com/elastic/go-elasticsearch/v8 v8.9.0
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-kit/log v0.2.1
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.4.0
 	github.com/grafana/dskit v0.0.0-20230518162305-3c92c534827e
 	github.com/grafana/loki v1.6.2-0.20230710223635-cb2b3ca9ea96
 	github.com/influxdata/influxdb-client-go/v2 v2.12.3
